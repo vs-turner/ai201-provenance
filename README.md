@@ -173,37 +173,105 @@ Mina may have written every word and still land here, because plain sentences sc
      two off the response, so leaving them out costs you next unit's
      diagnostics. -->
 
+Signal one, scored on its own with `python detector.py` before it was wired in:
+
+| Text | perplexity | model_signal |
+|---|---|---|
+| Flat "it is important to note" prose | 12.1 | 0.8907 |
+| A specific paragraph about missing the 6:40 bus | 115.0 | 0.1823 |
+| A lab note that is ordinary and a bit uneven | 76.3 | 0.3007 |
+
+The lab note is the submission below. The route returned the same `model_score`, 0.3007. `guess`, `confidence`, `label`, and `style_score` are still placeholders. The second signal is not wired in yet.
+
 ```bash
 $ curl -X POST http://127.0.0.1:5000/submit \
   -H "Content-Type: application/json" \
-  -d '{"text": "...", "creator_id": "..."}'
+  -d '{"text": "The lab went fine until the last step. I mixed the two solutions and waited, and the color changed the way the handout said it would. I am still not sure why the third beaker stayed clear. Maybe I measured wrong. The writeup is due Friday.", "creator_id": "victoria"}'
 ```
 
 ```json
-
+{
+  "confidence": null,
+  "content_id": "5d1c3289-6f47-435a-94b5-30d2bd15bc7f",
+  "guess": null,
+  "label": "PLACEHOLDER. The label is not decided yet.",
+  "model_score": 0.3007,
+  "style_score": null
+}
 ```
 
+HTTP 200.
+
 **An appeal**
+
+`POST /appeal` is still the starter response. Milestone 5 builds it. The `content_id` below is from an earlier submission of the same lab note.
 
 ```bash
 $ curl -X POST http://127.0.0.1:5000/appeal \
   -H "Content-Type: application/json" \
-  -d '{"content_id": "...", "reasoning": "..."}'
+  -d '{"content_id": "2132c72a-6b5d-4a16-af72-005f8831abf8", "reasoning": "I wrote this myself."}'
 ```
 
 ```json
-
+{
+  "error": "not_implemented",
+  "message": "POST /appeal isn't built yet \u2014 see the TODO in app.py.",
+  "you_sent": {
+    "content_id": "2132c72a-6b5d-4a16-af72-005f8831abf8",
+    "reasoning": "I wrote this myself."
+  }
+}
 ```
 
+HTTP 501.
+
 **What the log shows afterwards**
+
+The middle row is an empty `text` I sent on purpose. It came back HTTP 400 and was logged as `rejected`, not as a decision. The first row is an earlier run of the same lab note, from before the placeholder label lost its dash.
 
 ```bash
 $ curl "http://127.0.0.1:5000/log?limit=3"
 ```
 
 ```json
-
+{
+  "count": 3,
+  "entries": [
+    {
+      "combined_score": null,
+      "content_id": "2132c72a-6b5d-4a16-af72-005f8831abf8",
+      "creator_id": "victoria",
+      "guess": null,
+      "label": "PLACEHOLDER \u2014 the label is not decided yet.",
+      "model_score": 0.3007,
+      "status": "decided",
+      "style_score": null,
+      "timestamp": "2026-10-28T19:29:47+00:00"
+    },
+    {
+      "creator_id": "victoria",
+      "event": "rejected",
+      "message": "text must be at least 20 characters.",
+      "reason": "bad_input",
+      "status": "rejected",
+      "timestamp": "2026-10-28T19:29:47+00:00"
+    },
+    {
+      "combined_score": null,
+      "content_id": "5d1c3289-6f47-435a-94b5-30d2bd15bc7f",
+      "creator_id": "victoria",
+      "guess": null,
+      "label": "PLACEHOLDER. The label is not decided yet.",
+      "model_score": 0.3007,
+      "status": "decided",
+      "style_score": null,
+      "timestamp": "2026-10-28T19:30:22+00:00"
+    }
+  ]
+}
 ```
+
+HTTP 200.
 
 ---
 

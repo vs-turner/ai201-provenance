@@ -30,6 +30,7 @@ from flask import Flask, jsonify, request
 
 import audit
 import config
+import detector
 
 app = Flask(__name__)
 
@@ -150,6 +151,26 @@ def health():
 
 # ── YOU BUILD THIS ────────────────────────────────────────────────────────────
 
+# Label and confidence wait for Milestone 5. The string is here so a reader
+# can see the field is not a real decision yet.
+PLACEHOLDER_LABEL = "PLACEHOLDER. The label is not decided yet."
+
+MIN_TEXT_CHARS = 20
+MAX_TEXT_CHARS = 8000
+
+
+def _reject_input(message: str):
+    """Refuse a body that cannot be scored, and leave a log row for it."""
+    payload = request.get_json(silent=True)
+    creator_id = "unknown"
+    if isinstance(payload, dict):
+        raw = payload.get("creator_id")
+        if isinstance(raw, str) and raw.strip():
+            creator_id = raw.strip()
+    audit.log_rejection(creator_id=creator_id, reason="bad_input", message=message)
+    return jsonify({"error": "bad_input", "message": message}), 400
+
+
 @app.post("/submit")
 # @limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day")
 def submit():
@@ -199,17 +220,50 @@ def submit():
     what should this do when `text` is missing, empty, or enormous? A crash on
     a malformed input is one of the most common real failures there is.
     """
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return _reject_input("Request body must be a JSON object with text and creator_id.")
 
-    # TODO: delete this and build the route.
+    creator_id = payload.get("creator_id")
+    text = payload.get("text")
+    if not isinstance(creator_id, str) or not creator_id.strip():
+        return _reject_input("creator_id is required and must be a non-empty string.")
+    if not isinstance(text, str):
+        return _reject_input("text is required and must be a string.")
+    if len(text) < MIN_TEXT_CHARS:
+        return _reject_input(f"text must be at least {MIN_TEXT_CHARS} characters.")
+    if len(text) > MAX_TEXT_CHARS:
+        return _reject_input(f"text must be at most {MAX_TEXT_CHARS} characters.")
+
+    creator_id = creator_id.strip()
+    content_id = str(uuid.uuid4())
+    try:
+        model_score = detector.model_signal(text)
+    except ValueError as exc:
+        return _reject_input(str(exc))
+    except detector.DetectorUnavailable as exc:
+        return jsonify({"error": "detector_unavailable", "message": str(exc)}), 503
+
+    # guess, confidence, label, and style_score stay placeholders until the
+    # second signal and the label mapping exist.
+    audit.log_decision(
+        content_id=content_id,
+        creator_id=creator_id,
+        guess=None,
+        model_score=model_score,
+        style_score=None,
+        combined_score=None,
+        label=PLACEHOLDER_LABEL,
+        status="decided",
+    )
     return jsonify({
-        "error": "not_implemented",
-        "message": "POST /submit isn't built yet — see the TODO in app.py.",
-        "you_sent": {
-            "text_length": len(payload.get("text", "")),
-            "creator_id": payload.get("creator_id"),
-        },
-    }), 501
+        "content_id": content_id,
+        "guess": None,
+        "confidence": None,
+        "label": PLACEHOLDER_LABEL,
+        "model_score": model_score,
+        "style_score": None,
+    })
 
 
 @app.post("/appeal")
