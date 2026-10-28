@@ -42,61 +42,49 @@ Two things worth knowing before you pick numbers:
   a **miss**.
 
 ---
-## 1.
+## 1. False positives on my own writing
 
-<!-- Your criterion. It must name a number. -->
+Of 10 paragraphs I wrote myself, at most 1 comes back with `guess` `"ai"` in any single trial. The same bar applies to each of the 3 trials. A count of 2, 1, 2 is a miss.
 
-
-
-**Why this target:**
-
-
+**Why this target:** Calling a real writer AI is the expensive mistake. The site loses little if some generated text gets through. The writer loses the piece. One miss in ten is the most I will allow, and it has to hold every trial because the model score can move a little between runs.
 
 ---
 
-## 2.
+## 2. Score spread between a human passage and an AI-like passage
 
-<!-- Your criterion. -->
+I will freeze two passages before the run. One is a paragraph I wrote, with uneven sentence lengths. The other is flat generated prose in the "it is important to note" style. In each of the 3 trials, the combined score of the AI-like passage is at least 0.30 higher than the combined score of my paragraph.
 
-
-
-**Why this target:**
-
-
+**Why this target:** If those two land on top of each other, the labels are a coin flip. 0.30 is wide enough that a small perplexity wobble cannot invent a gap. It is also tight enough that a style signal stuck at 0.5 will fail unless the model scores are extreme. I want the gap to depend on both signals.
 
 ---
 
-## 3.
+## 3. All three labels are reachable
 
-<!-- Your criterion. -->
+I will freeze 6 submissions before the run: 2 I expect to land human, 2 I expect to land unsure, and 2 I expect to land AI. In each of the 3 trials, the set of `guess` values contains `"human"`, `"unsure"`, and `"ai"` at least once each.
 
-
-
-**Why this target:**
-
-
+**Why this target:** A label that no score can produce is a label I only wrote down. The unsure band is where a plain human paragraph is supposed to land when the score is high but not extreme, so that band has to show up on purpose.
 
 ---
 
-## 4.
+## 4. An appeal is recorded and a bad id is refused
 
-<!-- Your criterion. -->
+I submit 5 pieces, then appeal each returned `content_id` with a non-empty `reasoning`. All 5 appeals return HTTP 200 with `status` `"under_review"`. For each id, the log still has the original decision, and a later entry with the same `content_id`, `status` `"under_review"`, and the reasoning I sent. One extra appeal, using a `content_id` that was never submitted, returns HTTP 404 and adds no `under_review` row.
 
-
-
-**Why this target:**
-
-
+**Why this target:** The appeal is the only move a writer has after a wrong label. If it fails quietly, the accusation stands. 5 of 5 checks the happy path. The fake id is the typo case, which otherwise looks like a broken route.
 
 ---
 
-## 5.
+## 5. Bad input is refused
 
-<!-- Your criterion. -->
+These 5 request bodies each return HTTP 400. None of them is logged with `status` `"decided"`:
 
+1. No `text` field.
+2. `"text": ""`.
+3. `"text": null`.
+4. `"text"` longer than 8,000 characters.
+5. `"text"` shorter than 20 characters.
 
-
-**Why this target:**
+**Why this target:** A crash on a bad body looks like the detector failed. Empty text is not a piece of writing. Text under 20 characters is too short for perplexity, and the model raises if it is scored. Text over 8,000 characters is past what the model reads (about 300 words), so a score on it would pretend the signal saw the whole piece.
 
 
 
