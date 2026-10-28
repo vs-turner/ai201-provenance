@@ -153,12 +153,10 @@ def health():
 
 # ── YOU BUILD THIS ────────────────────────────────────────────────────────────
 
-# Label and confidence wait for Milestone 5. The string is here so a reader
-# can see the field is not a real decision yet.
-PLACEHOLDER_LABEL = "PLACEHOLDER. The label is not decided yet."
-
 MIN_TEXT_CHARS = 20
 MAX_TEXT_CHARS = 8000
+MAX_REASONING_CHARS = 2000
+APPEAL_MESSAGE = "Your appeal was recorded. The original decision is unchanged until someone reviews it."
 
 
 def _reject_input(message: str):
@@ -248,23 +246,23 @@ def submit():
 
     style_score = stylometry.style_signal(text)
     combined_score = scoring.combine_signals(model_score, style_score)
+    guess, label = scoring.score_to_label(combined_score)
 
-    # guess and label stay placeholders until Milestone 5 maps the score.
     audit.log_decision(
         content_id=content_id,
         creator_id=creator_id,
-        guess=None,
+        guess=guess,
         model_score=model_score,
         style_score=style_score,
         combined_score=combined_score,
-        label=PLACEHOLDER_LABEL,
+        label=label,
         status="decided",
     )
     return jsonify({
         "content_id": content_id,
-        "guess": None,
+        "guess": guess,
         "confidence": combined_score,
-        "label": PLACEHOLDER_LABEL,
+        "label": label,
         "model_score": model_score,
         "style_score": style_score,
         "combined_score": combined_score,
@@ -291,14 +289,53 @@ def appeal():
     to the person on the other end. It's the only thing standing between a
     wrong accusation and nothing at all.
     """
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify({
+            "error": "bad_input",
+            "message": "Request body must be a JSON object with content_id and reasoning.",
+        }), 400
 
-    # TODO: delete this and build the route.
+    content_id = payload.get("content_id")
+    reasoning = payload.get("reasoning")
+    if not isinstance(content_id, str) or not content_id.strip():
+        return jsonify({
+            "error": "bad_input",
+            "message": "content_id is required and must be a non-empty string.",
+        }), 400
+    if not isinstance(reasoning, str) or not reasoning.strip():
+        return jsonify({
+            "error": "bad_input",
+            "message": "reasoning is required and must be a non-empty string.",
+        }), 400
+    if len(reasoning) > MAX_REASONING_CHARS:
+        return jsonify({
+            "error": "bad_input",
+            "message": f"reasoning must be at most {MAX_REASONING_CHARS} characters.",
+        }), 400
+
+    content_id = content_id.strip()
+    reasoning = reasoning.strip()
+    entries = audit.entries_for(content_id)
+    if not entries:
+        return jsonify({
+            "error": "not_found",
+            "message": "No submission with that content_id.",
+        }), 404
+
+    creator_id = "unknown"
+    for entry in entries:
+        raw = entry.get("creator_id")
+        if isinstance(raw, str) and raw.strip():
+            creator_id = raw.strip()
+            break
+
+    audit.log_appeal(content_id=content_id, creator_id=creator_id, reasoning=reasoning)
     return jsonify({
-        "error": "not_implemented",
-        "message": "POST /appeal isn't built yet — see the TODO in app.py.",
-        "you_sent": payload,
-    }), 501
+        "content_id": content_id,
+        "status": "under_review",
+        "message": APPEAL_MESSAGE,
+    })
 
 
 # ── Already works ─────────────────────────────────────────────────────────────

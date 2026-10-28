@@ -52,7 +52,7 @@ Mina is a first-year student. English is her second language. She submits a lab 
 
 `model_score` comes back about 0.78. `gpt2` finds common words in short sentences easy to predict, so her note scores about as machine-like as machine writing. `style_score` comes back about 0.72, because the sentences are close to the same length and the vocabulary repeats. The average is 0.75.
 
-The placeholder line in `config.py` is 0.65. At 0.75 she would be told "This looks like model-written text." That is the accusation I do not want to make on a 0.75. I am moving high-confidence AI to 0.80, so 0.75 is unsure and the sentence she sees is "This one is too close to call. If you wrote it, you can ask us to review it." She sends `POST /appeal` with her `content_id` and a sentence saying she wrote it. The log keeps the original decision and adds `under_review`.
+The placeholder line in `config.py` was 0.65. At 0.75 she would be told "We think a program wrote this. If you wrote it yourself, ask for a review and a person will read it." That is the accusation I do not want to make on a 0.75. High-confidence AI starts at 0.80, so 0.75 is unsure and the sentence she sees is "We can't tell whether a person wrote this or a program did. You can ask us to look at it again." She sends `POST /appeal` with her `content_id` and a sentence saying she wrote it. The log keeps the original decision and adds `under_review`.
 
 A note that scores about 0.86 on both signals still clears 0.80 and gets the AI label. The appeal is the same door. Weighting cannot save her when both signals agree, and both signals are built to agree on plain prose.
 
@@ -156,16 +156,18 @@ On the two texts I am treating as the ends of the scale, the combined scores wer
 
 | Label | Score range | The exact text a reader sees |
 |---|---|---|
-| high-confidence human | 0.00 – 0.35 | This looks like a person wrote it. |
-| unsure | 0.35 – 0.80 | This one is too close to call. If you wrote it, you can ask us to review it. |
-| high-confidence AI | 0.80 – 1.00 | This looks like model-written text. If that is wrong, send an appeal and a person will look at it. |
+| high-confidence human | 0.00 – 0.35 | We think a person wrote this. |
+| unsure | 0.35 – 0.80 | We can't tell whether a person wrote this or a program did. You can ask us to look at it again. |
+| high-confidence AI | 0.80 – 1.00 | We think a program wrote this. If you wrote it yourself, ask for a review and a person will read it. |
+
+A score of exactly 0.35 is human. A score of exactly 0.80 is AI. `scoring.label_ranges()` prints the three ranges above.
 
 **Why I worded the "unsure" one this way:**
 <!-- It's the hardest of the three. It has to admit uncertainty without
      sounding like an accusation, because the person reading it may well have
      written every word themselves. -->
 
-Mina may have written every word and still land here, because plain sentences score high on both signals. "Too close to call" says the system did not decide she cheated. The second sentence tells her the appeal exists, which is the only thing she can do about it.
+The first draft said "This one is too close to call. If you wrote it, you can ask us to review it." Read as the writer, that does not say what is being called, and "if you wrote it" sounds like a suspicion. I would be confused, and then annoyed. The sentence now names the question, a person or a program, and tells me I can ask for another look. It does not say I cheated.
 
 
 
@@ -240,68 +242,112 @@ The same two ends of the scale, after both signals were wired. `confidence` and 
 
 **An appeal**
 
-`POST /appeal` is still the starter response. Milestone 5 builds it. The `content_id` below is from an earlier submission of the same lab note.
+These three submissions produced the three labels. The appeal uses the third `content_id`.
+
+```json
+{
+  "combined_score": 0.1907,
+  "confidence": 0.1907,
+  "content_id": "42753be6-ac29-4ced-8a07-95f0e5c9acb9",
+  "guess": "human",
+  "label": "We think a person wrote this.",
+  "model_score": 0.1823,
+  "style_score": 0.1991
+}
+```
+
+```json
+{
+  "combined_score": 0.7418,
+  "confidence": 0.7418,
+  "content_id": "92eaf9fb-ee81-4423-ac2d-1ceb0950270a",
+  "guess": "unsure",
+  "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+  "model_score": 0.8907,
+  "style_score": 0.5929
+}
+```
+
+```json
+{
+  "combined_score": 0.8206,
+  "confidence": 0.8206,
+  "content_id": "d5a05b24-2a01-4749-a964-40992a40e50c",
+  "guess": "ai",
+  "label": "We think a program wrote this. If you wrote it yourself, ask for a review and a person will read it.",
+  "model_score": 0.732,
+  "style_score": 0.9093
+}
+```
 
 ```bash
 $ curl -X POST http://127.0.0.1:5000/appeal \
   -H "Content-Type: application/json" \
-  -d '{"content_id": "2132c72a-6b5d-4a16-af72-005f8831abf8", "reasoning": "I wrote this myself."}'
+  -d '{"content_id": "d5a05b24-2a01-4749-a964-40992a40e50c", "reasoning": "I wrote this myself. The sentences are short because that is how I write when I am tired."}'
 ```
 
 ```json
 {
-  "error": "not_implemented",
-  "message": "POST /appeal isn't built yet \u2014 see the TODO in app.py.",
-  "you_sent": {
-    "content_id": "2132c72a-6b5d-4a16-af72-005f8831abf8",
-    "reasoning": "I wrote this myself."
-  }
+  "content_id": "d5a05b24-2a01-4749-a964-40992a40e50c",
+  "message": "Your appeal was recorded. The original decision is unchanged until someone reviews it.",
+  "status": "under_review"
 }
 ```
 
-HTTP 501.
+HTTP 200. A `content_id` that was never submitted returns HTTP 404 and adds no `under_review` row.
 
 **What the log shows afterwards**
 
-The middle row is an empty `text` I sent on purpose. It came back HTTP 400 and was logged as `rejected`, not as a decision. The first row is an earlier run of the same lab note, from before the placeholder label lost its dash.
+`limit=4` is the three labeled submissions and the appeal. The original AI row stays `decided`. The new row is `under_review` and keeps the same `content_id`.
 
 ```bash
-$ curl "http://127.0.0.1:5000/log?limit=3"
+$ curl "http://127.0.0.1:5000/log?limit=4"
 ```
 
 ```json
 {
-  "count": 3,
+  "count": 4,
   "entries": [
     {
-      "combined_score": null,
-      "content_id": "2132c72a-6b5d-4a16-af72-005f8831abf8",
-      "creator_id": "victoria",
-      "guess": null,
-      "label": "PLACEHOLDER \u2014 the label is not decided yet.",
-      "model_score": 0.3007,
+      "combined_score": 0.1907,
+      "content_id": "42753be6-ac29-4ced-8a07-95f0e5c9acb9",
+      "creator_id": "label-human",
+      "guess": "human",
+      "label": "We think a person wrote this.",
+      "model_score": 0.1823,
       "status": "decided",
-      "style_score": null,
-      "timestamp": "2026-10-28T19:29:47+00:00"
+      "style_score": 0.1991,
+      "timestamp": "2026-10-28T19:45:31+00:00"
     },
     {
-      "creator_id": "victoria",
-      "event": "rejected",
-      "message": "text must be at least 20 characters.",
-      "reason": "bad_input",
-      "status": "rejected",
-      "timestamp": "2026-10-28T19:29:47+00:00"
+      "combined_score": 0.7418,
+      "content_id": "92eaf9fb-ee81-4423-ac2d-1ceb0950270a",
+      "creator_id": "label-unsure",
+      "guess": "unsure",
+      "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+      "model_score": 0.8907,
+      "status": "decided",
+      "style_score": 0.5929,
+      "timestamp": "2026-10-28T19:45:31+00:00"
     },
     {
-      "combined_score": null,
-      "content_id": "5d1c3289-6f47-435a-94b5-30d2bd15bc7f",
-      "creator_id": "victoria",
-      "guess": null,
-      "label": "PLACEHOLDER. The label is not decided yet.",
-      "model_score": 0.3007,
+      "combined_score": 0.8206,
+      "content_id": "d5a05b24-2a01-4749-a964-40992a40e50c",
+      "creator_id": "label-ai",
+      "guess": "ai",
+      "label": "We think a program wrote this. If you wrote it yourself, ask for a review and a person will read it.",
+      "model_score": 0.732,
       "status": "decided",
-      "style_score": null,
-      "timestamp": "2026-10-28T19:30:22+00:00"
+      "style_score": 0.9093,
+      "timestamp": "2026-10-28T19:45:31+00:00"
+    },
+    {
+      "content_id": "d5a05b24-2a01-4749-a964-40992a40e50c",
+      "creator_id": "label-ai",
+      "event": "appeal",
+      "reasoning": "I wrote this myself. The sentences are short because that is how I write when I am tired.",
+      "status": "under_review",
+      "timestamp": "2026-10-28T19:45:31+00:00"
     }
   ]
 }

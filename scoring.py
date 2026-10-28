@@ -61,36 +61,21 @@ def combine_signals(model_score: float, style_score: float) -> float:
 
 def score_to_label(score: float) -> tuple[str, str]:
     """
-    Turn a score into a guess and the text a reader actually sees.
-    ← TODO (Milestone 5)
+    Turn a score into a guess and the sentence a reader actually sees.
 
     Returns:
-        (guess, label_text) — where `guess` is a short machine-readable string
-        like "ai" / "human" / "unsure", and `label_text` is the full sentence
-        shown to a person.
+        (guess, label_text). `guess` is "ai", "human", or "unsure".
+        `label_text` is the full sentence shown to a person.
 
-    ⚠️ Write the label text for someone who has never heard the word
-    "threshold".
-
-        ✗ "human, 0.81 confidence"
-        ✓ "We think this was probably written by a person."
-
-    All three labels have to be **reachable**. If no score can produce one of
-    them, your ranges have a gap — and Milestone 5 asks you to submit text that
-    produces each one, which is how you'd find out.
-
-    The hardest one to write is "unsure". It has to admit uncertainty without
-    sounding like an accusation, because the person reading it may well have
-    written every word themselves. Your breakout asks your group what they'd
-    think if they got it on their own work. That question is the whole
-    milestone.
+    At or below HUMAN_THRESHOLD is human. At or above AI_THRESHOLD is AI.
+    Everything between them is unsure. A score sitting on 0.35 is human.
+    A score sitting on 0.80 is AI.
     """
-    # TODO: replace this — thresholds are in config.py
     if score >= config.AI_THRESHOLD:
-        return "ai", "PLACEHOLDER — write the high-confidence AI label."
+        return "ai", "We think a program wrote this. If you wrote it yourself, ask for a review and a person will read it."
     if score <= config.HUMAN_THRESHOLD:
-        return "human", "PLACEHOLDER — write the high-confidence human label."
-    return "unsure", "PLACEHOLDER — write the unsure label."
+        return "human", "We think a person wrote this."
+    return "unsure", "We can't tell whether a person wrote this or a program did. You can ask us to look at it again."
 
 
 def label_ranges() -> list[tuple[str, str]]:
