@@ -111,7 +111,15 @@ HTTP 200 when the id exists. HTTP 404 with `{"error": "not_found", "message": ".
 
 ### Signal two — the style signal
 
-**What it measures:** The shape of the text, without reading it. Three measures in `stylometry.py`: how much sentence length varies (`sentence_length_spread`), how much of the vocabulary repeats (`type_token_ratio`), and how much punctuation there is relative to length (`punctuation_density`). `style_signal` flips the ones that point at human writing and scales them onto one 0 to 1 score. Higher means more likely AI.
+**What it measures:** The shape of the text, without reading it. Three measures in `stylometry.py`, then one 0 to 1 score. Higher means more likely AI.
+
+`sentence_length_spread` is the coefficient of variation of words per sentence. Higher means lumpier, which reads as more human. Fewer than two sentences returns 0.0, and that 0.0 counts as no evidence (0.5), not as perfectly even. A variation of 0.8 maps to an AI-direction score of 0.
+
+`type_token_ratio` is unique words over total words. Higher means more varied. 0.85 maps to an AI-direction score of 0, and 0.45 maps to 1.
+
+`punctuation_density` is commas, semicolons, colons, dashes, parentheses, and quotes per word. Periods are left out. 0.10 marks per word maps to an AI-direction score of 0.
+
+Those three AI-direction scores are combined as 0.50 spread, 0.25 type-token ratio, 0.25 punctuation.
 
 **Why that might differ between human and AI writing:** Generated prose tends toward even, mid-length sentences and a narrower vocabulary, because that is what "most likely next word" produces on average. Human writing is lumpier. A three-word sentence can sit next to a forty-word one, and the punctuation is less regular.
 
@@ -124,14 +132,16 @@ HTTP 200 when the id exists. HTTP 404 with `{"error": "not_found", "message": ".
 
 **The rule:** Average the two scores with equal weight. When they disagree, the result sits between them, which is the unsure band. Neither signal gets to overrule the other. Each one is blind where the other can still see something: the model signal misses plain human prose, and the style signal misses meaning and can be shoved around by typos.
 
-**The numbers:** `WEIGHT_MODEL_SIGNAL` 0.5, `WEIGHT_STYLE_SIGNAL` 0.5. Human at or below 0.35. Unsure above 0.35 and below 0.80. AI at or above 0.80. These replace the 0.65 placeholder. I have not changed `config.py` yet. Milestone 5 is where the thresholds get coded.
+**The numbers:** `WEIGHT_MODEL_SIGNAL` 0.5 and `WEIGHT_STYLE_SIGNAL` 0.5 in `config.py`. Human at or below 0.35. Unsure above 0.35 and below 0.80. AI at or above 0.80. Those cuts are `HUMAN_THRESHOLD` and `AI_THRESHOLD` in `config.py`. The label text is still a placeholder until Milestone 5.
+
+On the two texts I am treating as the ends of the scale, the combined scores were 0.7418 (flat generated prose) and 0.1907 (the bus paragraph). The gap is 0.5511.
 
 **Where it lives:** `scoring.py::combine_signals`
 
 <!-- ⚠️ The grader checks your code against that line. If your rule lives
      somewhere else, say where. -->
 
-**A case where my two signals split, and what my rule does with it:** A dense paragraph with rare words and very even sentences. `model_score` 0.20, because the rare words surprise `gpt2`. `style_score` 0.90, because the sentence lengths barely move. The average is 0.55, so `guess` is `"unsure"`. The model signal wanted "human" and the style signal wanted "AI". The rule keeps that split in the middle. It does not let the style score alone accuse the writer, and it does not let the model score alone clear them.
+**A case where my two signals split, and what my rule does with it:** The flat generated paragraph, with "Wait." shoved in and `variables` misspelled as `varibles`. `model_score` 0.5854. `style_score` 0.3261. The model still finds a lot of the paragraph predictable. The style score drops because the sentence lengths are no longer even. The average is 0.4557, so the combined score stays in the middle. One signal does not get to settle it.
 
 
 
@@ -181,7 +191,7 @@ Signal one, scored on its own with `python detector.py` before it was wired in:
 | A specific paragraph about missing the 6:40 bus | 115.0 | 0.1823 |
 | A lab note that is ordinary and a bit uneven | 76.3 | 0.3007 |
 
-The lab note is the submission below. The route returned the same `model_score`, 0.3007. `guess`, `confidence`, `label`, and `style_score` are still placeholders. The second signal is not wired in yet.
+The lab note below is from before the style signal was wired. The route returned `model_score` 0.3007, and `style_score` was still null.
 
 ```bash
 $ curl -X POST http://127.0.0.1:5000/submit \
@@ -201,6 +211,32 @@ $ curl -X POST http://127.0.0.1:5000/submit \
 ```
 
 HTTP 200.
+
+The same two ends of the scale, after both signals were wired. `confidence` and `combined_score` are the 0.5 / 0.5 average. The gap is 0.7418 − 0.1907 = 0.5511.
+
+```json
+{
+  "combined_score": 0.7418,
+  "confidence": 0.7418,
+  "content_id": "a8b020b3-fb66-4b22-8394-1a3e10f950f1",
+  "guess": null,
+  "label": "PLACEHOLDER. The label is not decided yet.",
+  "model_score": 0.8907,
+  "style_score": 0.5929
+}
+```
+
+```json
+{
+  "combined_score": 0.1907,
+  "confidence": 0.1907,
+  "content_id": "5c539132-75c8-49fd-98bf-5dd400e3fdd0",
+  "guess": null,
+  "label": "PLACEHOLDER. The label is not decided yet.",
+  "model_score": 0.1823,
+  "style_score": 0.1991
+}
+```
 
 **An appeal**
 

@@ -49,14 +49,14 @@ def combine_signals(model_score: float, style_score: float) -> float:
       - Milestone 4 asks you to find a case where your two signals split and
         write it down. That case is what this rule exists to handle.
 
-    The weights in config.py are placeholders. Change them, or ignore them and
-    write a different rule.
+    The weights in config.py are 0.5 and 0.5. A disagreement lands between
+    the two scores. See the README section "The combining rule".
     """
-    # TODO: replace this
-    return (
-        config.WEIGHT_MODEL_SIGNAL * model_score
-        + config.WEIGHT_STYLE_SIGNAL * style_score
+    score = (
+        config.WEIGHT_MODEL_SIGNAL * float(model_score)
+        + config.WEIGHT_STYLE_SIGNAL * float(style_score)
     )
+    return round(min(max(score, 0.0), 1.0), 4)
 
 
 def score_to_label(score: float) -> tuple[str, str]:

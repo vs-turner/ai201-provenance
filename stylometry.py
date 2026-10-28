@@ -47,55 +47,56 @@ def words(text: str) -> list[str]:
 
 # ── The three measures — YOU BUILD THESE ─────────────────────────────────────
 
+def _sentence_word_counts(text: str) -> list[int]:
+    return [len(words(sentence)) for sentence in sentences(text) if words(sentence)]
+
+
 def sentence_length_spread(text: str) -> float:
     """
-    How much sentence length varies. ← TODO
+    Coefficient of variation of words per sentence.
 
-    Returns:
-        A float. Decide yourself what scale it's on and which direction means
-        "more human" — then write that down, because your combining rule
-        depends on knowing it.
-
-    A hint on what you're reaching for: the standard deviation of sentence
-    lengths, probably divided by the mean so a long text and a short one are
-    comparable. `statistics.stdev` is imported for you.
-
-    Watch the edge case: a one-sentence submission has no spread at all, and
-    `stdev` raises on fewer than two values. Decide what that should return
-    before the attack set decides for you.
+    Higher means lumpier sentences, which this signal reads as more human.
+    Fewer than two sentences has no spread to measure, so this returns 0.0.
+    `style_signal` treats that 0.0 as "no evidence", not as "maximally even".
     """
-    # TODO: replace this
-    return 0.0
+    lengths = _sentence_word_counts(text)
+    if len(lengths) < 2:
+        return 0.0
+    mean = statistics.mean(lengths)
+    if mean == 0:
+        return 0.0
+    return statistics.stdev(lengths) / mean
 
 
 def type_token_ratio(text: str) -> float:
     """
-    Unique words over total words. ← TODO
+    Unique words over total words.
 
-    Returns:
-        A float between 0 and 1. Higher means more varied vocabulary.
-
-    Worth knowing before you rely on it: this measure falls as text gets
-    longer, because common words repeat. Two texts of different lengths aren't
-    directly comparable on it, and if your test inputs vary a lot in length,
-    that alone can look like a signal.
+    Higher means a more varied vocabulary, which this signal reads as more
+    human. The ratio falls as a text gets longer, so two texts of very
+    different lengths are not directly comparable.
     """
-    # TODO: replace this
-    return 0.0
+    tokens = words(text)
+    if not tokens:
+        return 0.0
+    return len(set(tokens)) / len(tokens)
 
 
 def punctuation_density(text: str) -> float:
     """
-    How much punctuation, relative to length. ← TODO
+    Commas, semicolons, colons, dashes, parentheses, and quotes per word.
 
-    Returns:
-        A float. Whether you count all punctuation or only some kinds — commas,
-        semicolons, dashes — is a real choice. Semicolons and em dashes are
-        more interesting than full stops, because they vary more between
-        writers.
+    Periods, question marks, and exclamation points are left out. Almost every
+    sentence has one, so they do not separate writers. Apostrophes are left
+    out too, because they sit inside words like "don't".
+    Higher means more of the marks that vary between writers, read here as
+    more human.
     """
-    # TODO: replace this
-    return 0.0
+    tokens = words(text)
+    if not tokens:
+        return 0.0
+    marks = re.findall(r"[,;:()\[\]\"“”]|—|–|--", text)
+    return len(marks) / len(tokens)
 
 
 # ── Combining them ───────────────────────────────────────────────────────────
@@ -121,9 +122,43 @@ def style_signal(text: str) -> float:
     clearly human, plain conventional human writing, lightly-edited AI — before
     you trust it. Plain and ordinary, not formal: formal prose reads as *human*
     to signal one, and it is plain writing that gets accused.
+
+    Direction, after flipping onto "higher means more likely AI":
+      sentence_length_spread   low CV -> high score. CV 0.8 maps to 0.
+      type_token_ratio          high ratio -> low score. 0.85 maps to 0,
+                                0.45 maps to 1.
+      punctuation_density       low density -> high score. 0.10 marks per
+                                word maps to 0.
+
+    One sentence, or no words, contributes 0.5 for the measure that cannot
+    be computed. That is "no evidence", not an accusation.
+
+    Weights inside this score: spread 0.50, type-token ratio 0.25,
+    punctuation 0.25. Spread gets half because the other two move less on
+    a short paragraph.
     """
-    # TODO: replace this
-    return 0.5
+    def clamp(value: float) -> float:
+        return min(max(value, 0.0), 1.0)
+
+    n_sentences = len(_sentence_word_counts(text))
+    if n_sentences < 2:
+        spread_ai = 0.5
+    else:
+        # CV 0 is perfectly even. CV 0.8 is a short sentence beside a long one.
+        spread_ai = clamp(1.0 - sentence_length_spread(text) / 0.8)
+
+    tokens = words(text)
+    if not tokens:
+        ttr_ai = 0.5
+        punct_ai = 0.5
+    else:
+        # 0.85 is a varied short paragraph. 0.45 is the same words on repeat.
+        ttr_ai = clamp((0.85 - type_token_ratio(text)) / 0.40)
+        # 0.10 is about one comma, dash, or semicolon every ten words.
+        punct_ai = clamp(1.0 - punctuation_density(text) / 0.10)
+
+    score = 0.50 * spread_ai + 0.25 * ttr_ai + 0.25 * punct_ai
+    return round(clamp(score), 4)
 
 
 if __name__ == "__main__":
@@ -139,4 +174,3 @@ if __name__ == "__main__":
     print(f"type_token_ratio         {type_token_ratio(text)}")
     print(f"punctuation_density      {punctuation_density(text)}")
     print(f"style_signal             {style_signal(text)}   (higher = more likely AI)")
-    print("\nAll zeros? These are stubs — Milestone 4 is where you build them.")
