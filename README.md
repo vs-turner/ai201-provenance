@@ -36,10 +36,60 @@
 
 ## What This Does
 
-<!-- The path a submission takes, from arriving to the label a reader sees.
-     Six or seven steps — this is the trace you wrote in Milestone 1. -->
+A piece of text goes through seven steps. Each one adds something the next step needs.
 
+1. `POST /submit` hits `app.py`. The route reads `text` and `creator_id`. A missing, empty, tiny, or huge `text` stops here with HTTP 400 and a rejection in the log. A usable body gets a new `content_id`.
+2. `detector.model_signal` runs local `gpt2` on the text and adds `model_score`, from 0 to 1. Higher means the model found the text easy to predict.
+3. `stylometry.style_signal` measures the text as text and adds `style_score`, on the same 0 to 1 scale. Higher means the shape looks more like generated prose.
+4. `scoring.combine_signals` turns those two numbers into one combined score. A 0.5 / 0.5 average. When the two signals split, the score sits in the middle.
+5. `scoring.score_to_label` turns that score into `guess` and the sentence a reader sees. 0.35 and below is human. Above 0.35 and below 0.80 is unsure. 0.80 and above is AI.
+6. `audit.log_decision` appends one log line: timestamp, content id, creator, guess, both signal scores, the combined score, the label text, and `status` `"decided"`.
+7. The route returns that decision as JSON. If the writer disagrees, `POST /appeal` looks up the `content_id`, appends a new log line with `status` `"under_review"`, and tells them the appeal was recorded. The original decision stays in the log.
 
+### The false positive
+
+Mina is a first-year student. English is her second language. She submits a lab note in short, plain sentences, using words she is sure of. She wrote every sentence.
+
+`model_score` comes back about 0.78. `gpt2` finds common words in short sentences easy to predict, so her note scores about as machine-like as machine writing. `style_score` comes back about 0.72, because the sentences are close to the same length and the vocabulary repeats. The average is 0.75.
+
+The placeholder line in `config.py` is 0.65. At 0.75 she would be told "This looks like model-written text." That is the accusation I do not want to make on a 0.75. I am moving high-confidence AI to 0.80, so 0.75 is unsure and the sentence she sees is "This one is too close to call. If you wrote it, you can ask us to review it." She sends `POST /appeal` with her `content_id` and a sentence saying she wrote it. The log keeps the original decision and adds `under_review`.
+
+A note that scores about 0.86 on both signals still clears 0.80 and gets the AI label. The appeal is the same door. Weighting cannot save her when both signals agree, and both signals are built to agree on plain prose.
+
+### The two endpoints
+
+`POST /submit`
+
+| Field in | Type | Rule |
+|---|---|---|
+| `text` | string | Required. 20 to 8,000 characters. |
+| `creator_id` | string | Required. Non-empty after trimming. |
+
+| Field out | Type | Meaning |
+|---|---|---|
+| `content_id` | string | New id for this decision. `/appeal` uses it. |
+| `guess` | string | `"human"`, `"unsure"`, or `"ai"`. |
+| `confidence` | number | The combined score, 0 to 1. Higher means more likely AI. |
+| `label` | string | The sentence in the label table below. |
+| `model_score` | number | Signal one, 0 to 1. |
+| `style_score` | number | Signal two, 0 to 1. |
+
+HTTP 200 on a scored submission. HTTP 400 with `{"error": "bad_input", "message": "..."}` when `text` or `creator_id` fails the rules above. A 400 is logged as a rejection, with no `guess`.
+
+`POST /appeal`
+
+| Field in | Type | Rule |
+|---|---|---|
+| `content_id` | string | Required. Must already be in the log. |
+| `reasoning` | string | Required. Non-empty, at most 2,000 characters. |
+
+| Field out | Type | Meaning |
+|---|---|---|
+| `content_id` | string | The id that was appealed. |
+| `status` | string | `"under_review"`. |
+| `message` | string | "Your appeal was recorded. The original decision is unchanged until someone reviews it." |
+
+HTTP 200 when the id exists. HTTP 404 with `{"error": "not_found", "message": "..."}` when it does not. HTTP 400 when a field is missing or `reasoning` is empty. A 404 does not write `under_review`.
 
 ---
 
@@ -53,35 +103,35 @@
 
 ### Signal one — the model signal
 
-**What it measures:**
+**What it measures:** How predictable the text is to a local `gpt2` model. The raw number is perplexity. Low perplexity becomes a high `model_score`. The score is 0 to 1, and higher means more likely AI. The midpoint is perplexity 45, which maps to 0.5. This lives in `detector.py::model_signal`.
 
-**Why that might differ between human and AI writing:**
+**Why that might differ between human and AI writing:** A model writes by picking a likely next word, so text a model produced is often text a model finds easy to predict. Human writing more often takes an odd turn or uses a rare word, and those raise perplexity.
 
-**What it can't see:**
+**What it can't see:** Predictability is not authorship. The score goes up for common words in short, ordinary sentences. That includes a person writing in a second language and staying with words they are sure of, a younger writer, and anyone writing plainly on purpose. Their prose can score as machine-like as machine writing. Dense prose with rare words often goes the other way and scores human, because rare words are what `gpt2` fails to predict. The people this signal is most likely to accuse are the ones with the least room to argue.
 
 ### Signal two — the style signal
 
-**What it measures:**
+**What it measures:** The shape of the text, without reading it. Three measures in `stylometry.py`: how much sentence length varies (`sentence_length_spread`), how much of the vocabulary repeats (`type_token_ratio`), and how much punctuation there is relative to length (`punctuation_density`). `style_signal` flips the ones that point at human writing and scales them onto one 0 to 1 score. Higher means more likely AI.
 
-**Why that might differ between human and AI writing:**
+**Why that might differ between human and AI writing:** Generated prose tends toward even, mid-length sentences and a narrower vocabulary, because that is what "most likely next word" produces on average. Human writing is lumpier. A three-word sentence can sit next to a forty-word one, and the punctuation is less regular.
 
-**What it can't see:**
+**What it can't see:** It cannot read. It has no idea what the text says. Anything that changes the shape moves the score: typos, broken-up sentences, a pasted quotation. That is cheap to do on purpose. A one-sentence submission has no length spread to measure. Type-token ratio also falls as a text gets longer, so a long human essay can look more repetitive than a short generated paragraph.
 
 ### The combining rule
 
 <!-- Write the rule in words, then give the numbers. What happens when the two
      signals disagree? -->
 
-**The rule:**
+**The rule:** Average the two scores with equal weight. When they disagree, the result sits between them, which is the unsure band. Neither signal gets to overrule the other. Each one is blind where the other can still see something: the model signal misses plain human prose, and the style signal misses meaning and can be shoved around by typos.
 
-**The numbers:**
+**The numbers:** `WEIGHT_MODEL_SIGNAL` 0.5, `WEIGHT_STYLE_SIGNAL` 0.5. Human at or below 0.35. Unsure above 0.35 and below 0.80. AI at or above 0.80. These replace the 0.65 placeholder. I have not changed `config.py` yet. Milestone 5 is where the thresholds get coded.
 
 **Where it lives:** `scoring.py::combine_signals`
 
 <!-- ⚠️ The grader checks your code against that line. If your rule lives
      somewhere else, say where. -->
 
-**A case where my two signals split, and what my rule does with it:**
+**A case where my two signals split, and what my rule does with it:** A dense paragraph with rare words and very even sentences. `model_score` 0.20, because the rare words surprise `gpt2`. `style_score` 0.90, because the sentence lengths barely move. The average is 0.55, so `guess` is `"unsure"`. The model signal wanted "human" and the style signal wanted "AI". The rule keeps that split in the middle. It does not let the style score alone accuse the writer, and it does not let the model score alone clear them.
 
 
 
@@ -96,14 +146,16 @@
 
 | Label | Score range | The exact text a reader sees |
 |---|---|---|
-| high-confidence human |  |  |
-| unsure |  |  |
-| high-confidence AI |  |  |
+| high-confidence human | 0.00 – 0.35 | This looks like a person wrote it. |
+| unsure | 0.35 – 0.80 | This one is too close to call. If you wrote it, you can ask us to review it. |
+| high-confidence AI | 0.80 – 1.00 | This looks like model-written text. If that is wrong, send an appeal and a person will look at it. |
 
 **Why I worded the "unsure" one this way:**
 <!-- It's the hardest of the three. It has to admit uncertainty without
      sounding like an accusation, because the person reading it may well have
      written every word themselves. -->
+
+Mina may have written every word and still land here, because plain sentences score high on both signals. "Too close to call" says the system did not decide she cheated. The second sentence tells her the appeal exists, which is the only thing she can do about it.
 
 
 
