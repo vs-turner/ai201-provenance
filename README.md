@@ -36,6 +36,8 @@
 
 ## What This Does
 
+A writer sends a piece of text. The service scores it with two signals, turns that into one number, and answers with a sentence the writer can read. If they disagree, they can ask for a review. The original decision stays in the log.
+
 A piece of text goes through seven steps. Each one adds something the next step needs.
 
 1. `POST /submit` hits `app.py`. The route reads `text` and `creator_id`. A missing, empty, tiny, or huge `text` stops here with HTTP 400 and a rejection in the log. A usable body gets a new `content_id`.
@@ -132,7 +134,7 @@ Those three AI-direction scores are combined as 0.50 spread, 0.25 type-token rat
 
 **The rule:** Average the two scores with equal weight. When they disagree, the result sits between them, which is the unsure band. Neither signal gets to overrule the other. Each one is blind where the other can still see something: the model signal misses plain human prose, and the style signal misses meaning and can be shoved around by typos.
 
-**The numbers:** `WEIGHT_MODEL_SIGNAL` 0.5 and `WEIGHT_STYLE_SIGNAL` 0.5 in `config.py`. Human at or below 0.35. Unsure above 0.35 and below 0.80. AI at or above 0.80. Those cuts are `HUMAN_THRESHOLD` and `AI_THRESHOLD` in `config.py`. The label text is still a placeholder until Milestone 5.
+**The numbers:** `WEIGHT_MODEL_SIGNAL` 0.5 and `WEIGHT_STYLE_SIGNAL` 0.5 in `config.py`. Human at or below 0.35. Unsure above 0.35 and below 0.80. AI at or above 0.80. Those cuts are `HUMAN_THRESHOLD` and `AI_THRESHOLD` in `config.py`. The sentences a reader sees are in Label Variants.
 
 On the two texts I am treating as the ends of the scale, the combined scores were 0.7418 (flat generated prose) and 0.1907 (the bus paragraph). The gap is 0.5511.
 
@@ -361,15 +363,15 @@ HTTP 200.
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* Build the style signal in `stylometry.py`, average it with the model score in `scoring.py::combine_signals`, and write down one case where the two signals disagree.
+- *What came back:* Sentence-length spread, type-token ratio, and punctuation density, combined at 0.50 / 0.25 / 0.25. The two signals averaged at 0.5 / 0.5. The split case was invented: a dense paragraph with `model_score` 0.20, `style_score` 0.90, and an average of 0.55.
+- *What I changed:* I ran both signals on a real paragraph, the flat generated one with "Wait." inserted and `variables` spelled `varibles`. The measured scores were `model_score` 0.5854 and `style_score` 0.3261, average 0.4557. I deleted the invented 0.20 and 0.90 and put those measured numbers in the README. The combining rule stayed an equal average.
 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* Three full sentences for the labels, written for someone who has never heard the word "threshold," and wired from `scoring.py::score_to_label` into the `/submit` response.
+- *What came back:* The unsure sentence was "This one is too close to call. If you wrote it, you can ask us to review it."
+- *What I changed:* I rewrote that sentence. "Too close to call" does not say what is being decided, and "if you wrote it" sounds like a suspicion. The sentence in the README and in `score_to_label` is now "We can't tell whether a person wrote this or a program did. You can ask us to look at it again."
 
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 
