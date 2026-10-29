@@ -893,6 +893,26 @@ Trials 2 and 3 matched trial 1 on every status, guess, and score. All three are 
 
      Look for a pattern. Five failures on one signal is one problem, not five. -->
 
+All five criteria are MET. Each target held in all three trials. I did not revise any criterion. There is no criterion miss, so the stage-and-mechanism notes below are for the three broken attacks.
+
+1. MET. I counted how many of the ten notes came back with `guess` `"ai"` in each trial. The counts were 0, 0, and 0. The target allows at most 1 in every trial.
+2. MET. I subtracted the bus paragraph's combined score from the framework paragraph's. Each trial was 0.7418 minus 0.1907, which is 0.5511. The target is a gap of at least 0.30.
+3. MET. I listed the six guesses in each trial. Each list was human, human, unsure, unsure, ai, ai, so all three labels appeared.
+4. MET. I counted appeals that returned HTTP 200 with `status` `"under_review"`, with the original row still `"decided"` and a later row carrying the reasoning I sent. That was 5 of 5 in each trial. The unknown id returned HTTP 404, and its `under_review` count stayed 0.
+5. MET. I counted bodies that returned HTTP 400. That was 5 of 5 in each trial. `decided_rows_for_creator` stayed 0, so none of them was logged as decided.
+
+The target I would tighten is criterion 1. It only counts a miss when `guess` is `"ai"`, and the AI line is 0.80, so a note that comes back unsure still passes. Two of the ten did: 0.3571 and 0.3774. A tighter line would be at most 1 of 10 coming back unsure or AI. On this run that is 2 of 10, which would be a miss. The original line stays.
+
+Three attacks broke: e1, e2, and e3. The other 16 held. The three breaks are one problem. Generated prose was labeled AI only when the sentences were almost the same length. The even six-sentence version of e2 scored `model_score` 0.7320, `style_score` 0.9093, combined 0.8206, guess `"ai"`. The same material with one-word interruptions, and the unedited framework paragraph, did not clear 0.80.
+
+Signal two is `stylometry.style_signal`. Half of it is sentence-length spread. The coefficient of variation is mapped so that 0.8 scores 0 in the AI direction. A one-word sentence next to a long one drives that term down. The combining rule in `scoring.combine_signals` then averages that with signal one at 0.5 and 0.5. The label mapping in `scoring.score_to_label` calls anything under 0.35 human and anything under 0.80 unsure.
+
+e1. Stage: signal two, and signal one moved the same way. Mechanism: a one-word sentence and a typo. It stuck "Wait." into the framework paragraph and misspelled `variables` as `varibles`. Sentence lengths were 13, 20, 1, 14, 9. Spread was 0.616, so that half of signal two scored 0.230. Style score 0.3261. Signal one fell at the same time, from 0.8907 on the unedited paragraph to 0.5854, because "Wait." and the odd spelling are less predictable to the model. Either drop, averaged at half weight, stays under 0.80. The average was 0.4557, so the label was unsure. The attack asked for human or unsure.
+
+e2. Stage: signal two, and signal one moved the same way. The human label is then the label mapping. Mechanism: one-word sentences next to a long one. It chopped the even sentences with "No." and "Huh." and one long sentence in the middle. Lengths were 6, 1, 22, 1, 5, 5, 5, 14. Spread was 0.970, past 0.8, so that half of signal two scored 0. Style score 0.2728, against 0.9093 on the even version. Signal one fell from 0.7320 to 0.4222. The average was 0.3475. That is under 0.35, so the label mapping called it human.
+
+e3. Stage: the label mapping. Mechanism: the AI line is 0.80, and the combining rule gives the weaker style score equal weight. This is the framework paragraph with no edit. Signal one held at 0.8907. Sentence lengths were 13, 20, 14, 16, spread 0.197, so the spread term was still 0.754. The paragraph is short, so the type-token ratio stayed 0.714 and that quarter of signal two scored only 0.339. Style score 0.5929. The 0.5 / 0.5 average is 0.7418. That line was set so a plain note near 0.75 would not be called AI, and this paragraph sits in the same band.
+
 
 
 ---
