@@ -472,18 +472,410 @@ f1. The text is eight short plain sentences: class at eight, a cold room, the bu
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| 1. False positives on my own writing | at most 1 of 10 with guess ai | 0/10 | 0/10 | 0/10 | MET |
+| 2. Score spread | AI-like combined score at least 0.30 above mine | 0.5511 | 0.5511 | 0.5511 | MET |
+| 3. All three labels reachable | human, unsure, and ai each appear at least once | 3/3 | 3/3 | 3/3 | MET |
+| 4. Appeal recorded, unknown id refused | 5 of 5 HTTP 200 under_review, and the unknown id HTTP 404 with no new under_review row | 5/5 and 404 | 5/5 and 404 | 5/5 and 404 | MET |
+| 5. Bad input refused | 5 of 5 HTTP 400, and none logged with status decided | 5/5 | 5/5 | 5/5 | MET |
 
-**Real output from one trial**, pasted as text, naming the file and function
-that produced it:
+
+**Real output from trial 1 of each criterion.** Produced by `run_eval.py::main`. Scores come from `app.py::submit` calling `scoring.py::combine_signals`. The appeal rows also call `app.py::appeal`. The appeal scenario is not a submit-only loop: `run_eval.py::run_appeal_trial` submits, appeals the returned `content_id`, then appeals `not-a-real-content-id`.
+
+Trials 2 and 3 matched trial 1 on every status, guess, and score. All three are written out in `results/run_2026-10-29_1100_before.md`. Nothing in the pipeline moved between runs.
+
+**my own writing, trial 1**
 
 ```json
-
+[
+  {
+    "status": 200,
+    "content_id": "8f8c4adc-38ee-4b11-b1dc-3de4e46f4171",
+    "guess": "human",
+    "confidence": 0.1907,
+    "model_score": 0.1823,
+    "style_score": 0.1991,
+    "label": "We think a person wrote this.",
+    "sent": "I missed the 6:40 bus again because the stop on Clement is a guess. Th"
+  },
+  {
+    "status": 200,
+    "content_id": "47fafdc7-343c-46c1-ba58-78a156740446",
+    "guess": "human",
+    "confidence": 0.328,
+    "model_score": 0.3007,
+    "style_score": 0.3553,
+    "label": "We think a person wrote this.",
+    "sent": "The lab went fine until the last step. I mixed the two solutions and w"
+  },
+  {
+    "status": 200,
+    "content_id": "27c5c897-249d-4547-ad1f-e68697c9b0f6",
+    "guess": "human",
+    "confidence": 0.2304,
+    "model_score": 0.2046,
+    "style_score": 0.2563,
+    "label": "We think a person wrote this.",
+    "sent": "The rice from Sunday is still in the blue pot, which I keep meaning to"
+  },
+  {
+    "status": 200,
+    "content_id": "aa853f11-6a88-49ff-a62c-5158cdfcf6a0",
+    "guess": "human",
+    "confidence": 0.272,
+    "model_score": 0.2541,
+    "style_score": 0.2898,
+    "label": "We think a person wrote this.",
+    "sent": "My hold on the camera manual finally came in, three weeks late, and th"
+  },
+  {
+    "status": 200,
+    "content_id": "f40f46fa-a24a-4301-8dd2-799a0f4d3f50",
+    "guess": "human",
+    "confidence": 0.275,
+    "model_score": 0.3299,
+    "style_score": 0.22,
+    "label": "We think a person wrote this.",
+    "sent": "I left the umbrella in the lecture hall, the black one with the bent r"
+  },
+  {
+    "status": 200,
+    "content_id": "abcbdf58-8a04-47ff-bdb3-50da577b5424",
+    "guess": "human",
+    "confidence": 0.2919,
+    "model_score": 0.3638,
+    "style_score": 0.22,
+    "label": "We think a person wrote this.",
+    "sent": "Nobody answered in the group chat until 11, and then it was only Maya "
+  },
+  {
+    "status": 200,
+    "content_id": "9725511a-a1e2-4c74-b81a-412c5c580786",
+    "guess": "unsure",
+    "confidence": 0.3571,
+    "model_score": 0.4286,
+    "style_score": 0.2857,
+    "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+    "sent": "I went to the market for eggs and came back with eggs, a lime, and the"
+  },
+  {
+    "status": 200,
+    "content_id": "3a1bdd3b-652f-4c14-9301-8ddd50d60de5",
+    "guess": "human",
+    "confidence": 0.3178,
+    "model_score": 0.2988,
+    "style_score": 0.3369,
+    "label": "We think a person wrote this.",
+    "sent": "The radiator in the front room knocks twice and then hisses, which use"
+  },
+  {
+    "status": 200,
+    "content_id": "27653c21-2953-4808-b6ad-f63b03dbb438",
+    "guess": "unsure",
+    "confidence": 0.3774,
+    "model_score": 0.3747,
+    "style_score": 0.3802,
+    "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+    "sent": "My sister called while I was on the 22, and I missed it, then called h"
+  },
+  {
+    "status": 200,
+    "content_id": "b5c441c9-3ed1-4e5d-8228-bf900824f449",
+    "guess": "human",
+    "confidence": 0.2786,
+    "model_score": 0.4541,
+    "style_score": 0.1031,
+    "label": "We think a person wrote this.",
+    "sent": "Alarm at 7:10, snooze, alarm at 7:19, and then I was awake because the"
+  }
+]
 ```
+
+**score spread, trial 1**
+
+```json
+[
+  {
+    "status": 200,
+    "content_id": "ccfca510-0401-45e1-8a1d-d24b5155b44e",
+    "guess": "human",
+    "confidence": 0.1907,
+    "model_score": 0.1823,
+    "style_score": 0.1991,
+    "label": "We think a person wrote this.",
+    "sent": "I missed the 6:40 bus again because the stop on Clement is a guess. Th"
+  },
+  {
+    "status": 200,
+    "content_id": "3fe2bcc8-b07c-49cc-9e4a-802a0fa0200f",
+    "guess": "unsure",
+    "confidence": 0.7418,
+    "model_score": 0.8907,
+    "style_score": 0.5929,
+    "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+    "sent": "The implementation of the proposed framework requires careful consider"
+  }
+]
+```
+
+**label coverage, trial 1**
+
+```json
+[
+  {
+    "status": 200,
+    "content_id": "071f6ed3-a38e-4b7f-b4bc-a4c4d44f4531",
+    "guess": "human",
+    "confidence": 0.1907,
+    "model_score": 0.1823,
+    "style_score": 0.1991,
+    "label": "We think a person wrote this.",
+    "sent": "I missed the 6:40 bus again because the stop on Clement is a guess. Th"
+  },
+  {
+    "status": 200,
+    "content_id": "3b0c6776-3c31-4eae-aa92-cd057c06f90a",
+    "guess": "human",
+    "confidence": 0.328,
+    "model_score": 0.3007,
+    "style_score": 0.3553,
+    "label": "We think a person wrote this.",
+    "sent": "The lab went fine until the last step. I mixed the two solutions and w"
+  },
+  {
+    "status": 200,
+    "content_id": "eb5feee4-d9d3-40e4-ba95-7d2243b8d8f2",
+    "guess": "unsure",
+    "confidence": 0.4557,
+    "model_score": 0.5854,
+    "style_score": 0.3261,
+    "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+    "sent": "The implementation of the proposed framework requires careful consider"
+  },
+  {
+    "status": 200,
+    "content_id": "60ef11db-4299-402f-858e-d0b8c4628c78",
+    "guess": "unsure",
+    "confidence": 0.7418,
+    "model_score": 0.8907,
+    "style_score": 0.5929,
+    "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+    "sent": "The implementation of the proposed framework requires careful consider"
+  },
+  {
+    "status": 200,
+    "content_id": "e77b4818-bce8-48e4-9af7-b4f797a143d1",
+    "guess": "ai",
+    "confidence": 0.8206,
+    "model_score": 0.732,
+    "style_score": 0.9093,
+    "label": "We think a program wrote this. If you wrote it yourself, ask for a review and a person will read it.",
+    "sent": "The system provides a clear result. The system supports the user. The "
+  },
+  {
+    "status": 200,
+    "content_id": "dfa7e991-6050-4157-b416-c051fc55e519",
+    "guess": "ai",
+    "confidence": 0.8017,
+    "model_score": 0.6941,
+    "style_score": 0.9093,
+    "label": "We think a program wrote this. If you wrote it yourself, ask for a review and a person will read it.",
+    "sent": "The process delivers a useful outcome. The process reduces the delay. "
+  }
+]
+```
+
+**appeal path, trial 1**
+
+```json
+[
+  {
+    "status": 200,
+    "content_id": "6bbbe8c2-34bc-49a5-a581-19184842649d",
+    "guess": "human",
+    "confidence": 0.2252,
+    "model_score": 0.1272,
+    "style_score": 0.3232,
+    "label": "We think a person wrote this.",
+    "appeal_status": 200,
+    "appeal": {
+      "content_id": "6bbbe8c2-34bc-49a5-a581-19184842649d",
+      "message": "Your appeal was recorded. The original decision is unchanged until someone reviews it.",
+      "status": "under_review"
+    },
+    "log_statuses": [
+      "decided",
+      "under_review"
+    ],
+    "original_still_decided": true,
+    "log_has_reasoning": true,
+    "sent": "I missed the 6:40 bus again because the stop on Clement is a guess. Th"
+  },
+  {
+    "status": 200,
+    "content_id": "962d9225-bc35-49e6-8f28-334aff356768",
+    "guess": "human",
+    "confidence": 0.3052,
+    "model_score": 0.246,
+    "style_score": 0.3644,
+    "label": "We think a person wrote this.",
+    "appeal_status": 200,
+    "appeal": {
+      "content_id": "962d9225-bc35-49e6-8f28-334aff356768",
+      "message": "Your appeal was recorded. The original decision is unchanged until someone reviews it.",
+      "status": "under_review"
+    },
+    "log_statuses": [
+      "decided",
+      "under_review"
+    ],
+    "original_still_decided": true,
+    "log_has_reasoning": true,
+    "sent": "The lab went fine until the last step. I mixed the two solutions and w"
+  },
+  {
+    "status": 200,
+    "content_id": "5ec28932-9a91-44c0-87e8-22816c0ff60f",
+    "guess": "human",
+    "confidence": 0.2989,
+    "model_score": 0.2529,
+    "style_score": 0.345,
+    "label": "We think a person wrote this.",
+    "appeal_status": 200,
+    "appeal": {
+      "content_id": "5ec28932-9a91-44c0-87e8-22816c0ff60f",
+      "message": "Your appeal was recorded. The original decision is unchanged until someone reviews it.",
+      "status": "under_review"
+    },
+    "log_statuses": [
+      "decided",
+      "under_review"
+    ],
+    "original_still_decided": true,
+    "log_has_reasoning": true,
+    "sent": "The rice from Sunday is still in the blue pot, which I keep meaning to"
+  },
+  {
+    "status": 200,
+    "content_id": "9755a0ab-f6c0-4825-bedf-5b72e2f6c8a1",
+    "guess": "human",
+    "confidence": 0.2269,
+    "model_score": 0.2038,
+    "style_score": 0.25,
+    "label": "We think a person wrote this.",
+    "appeal_status": 200,
+    "appeal": {
+      "content_id": "9755a0ab-f6c0-4825-bedf-5b72e2f6c8a1",
+      "message": "Your appeal was recorded. The original decision is unchanged until someone reviews it.",
+      "status": "under_review"
+    },
+    "log_statuses": [
+      "decided",
+      "under_review"
+    ],
+    "original_still_decided": true,
+    "log_has_reasoning": true,
+    "sent": "My hold on the camera manual finally came in, three weeks late, and th"
+  },
+  {
+    "status": 200,
+    "content_id": "214cfcbd-3fa3-4927-9c77-b124a6bcf0c4",
+    "guess": "human",
+    "confidence": 0.3466,
+    "model_score": 0.3493,
+    "style_score": 0.3438,
+    "label": "We think a person wrote this.",
+    "appeal_status": 200,
+    "appeal": {
+      "content_id": "214cfcbd-3fa3-4927-9c77-b124a6bcf0c4",
+      "message": "Your appeal was recorded. The original decision is unchanged until someone reviews it.",
+      "status": "under_review"
+    },
+    "log_statuses": [
+      "decided",
+      "under_review"
+    ],
+    "original_still_decided": true,
+    "log_has_reasoning": true,
+    "sent": "I left the umbrella in the lecture hall, the black one with the bent r"
+  },
+  {
+    "status": 404,
+    "guess": null,
+    "content_id": "not-a-real-content-id",
+    "appeal_status": 404,
+    "appeal": {
+      "error": "not_found",
+      "message": "No submission with that content_id."
+    },
+    "under_review_rows_before": 0,
+    "under_review_rows_after": 0,
+    "sent": "not-a-real-content-id"
+  }
+]
+```
+
+**bad input, trial 1**
+
+```json
+[
+  {
+    "status": 400,
+    "content_id": null,
+    "guess": null,
+    "confidence": null,
+    "model_score": null,
+    "style_score": null,
+    "label": null,
+    "sent": "{\"creator_id\": \"eval_bad_missing\"}",
+    "decided_rows_for_creator": 0
+  },
+  {
+    "status": 400,
+    "content_id": null,
+    "guess": null,
+    "confidence": null,
+    "model_score": null,
+    "style_score": null,
+    "label": null,
+    "sent": "(empty text)",
+    "decided_rows_for_creator": 0
+  },
+  {
+    "status": 400,
+    "content_id": null,
+    "guess": null,
+    "confidence": null,
+    "model_score": null,
+    "style_score": null,
+    "label": null,
+    "sent": "{\"text\": null, \"creator_id\": \"eval_bad_null\"}",
+    "decided_rows_for_creator": 0
+  },
+  {
+    "status": 400,
+    "content_id": null,
+    "guess": null,
+    "confidence": null,
+    "model_score": null,
+    "style_score": null,
+    "label": null,
+    "sent": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "decided_rows_for_creator": 0
+  },
+  {
+    "status": 400,
+    "content_id": null,
+    "guess": null,
+    "confidence": null,
+    "model_score": null,
+    "style_score": null,
+    "label": null,
+    "sent": "hi",
+    "decided_rows_for_creator": 0
+  }
+]
+```
+
 
 **Diagnoses**
 

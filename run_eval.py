@@ -66,6 +66,93 @@ def describe(body):
     return json.dumps(body)[:120]
 
 
+def log_entries(url, timeout):
+    """The audit log, oldest first. Appeal and bad-input checks read it back."""
+    import requests
+    response = requests.get(f"{url}/log", timeout=timeout)
+    payload = response.json() if response.content else {}
+    return payload.get("entries", [])
+
+
+def post_json(url, path, body, timeout):
+    """POST one JSON body and return status plus the parsed payload."""
+    import requests
+    response = requests.post(f"{url}{path}", json=body, timeout=timeout)
+    try:
+        payload = response.json() if response.content else {}
+    except ValueError as exc:
+        payload = {"error": f"{type(exc).__name__}: {exc}"}
+    return response.status_code, payload
+
+
+def run_appeal_trial(scenario, url, timeout):
+    """
+    Submit each text, appeal the content_id that comes back, then appeal an
+    id that was never submitted.
+
+    Criterion 4 needs all of that. A submit-only loop cannot see whether the
+    original decision stayed in the log.
+    """
+    step = scenario["then_appeal"]
+    reasoning = step["reasoning"]
+    unknown_id = step["unknown_id"]
+    results = []
+    for i, text in enumerate(scenario["texts"], 1):
+        body = {"text": text, "creator_id": f"eval_appeal_{i}"}
+        status, payload = post_json(url, "/submit", body, timeout)
+        content_id = payload.get("content_id")
+        appeal_status, appeal_payload = post_json(
+            url, "/appeal",
+            {"content_id": content_id, "reasoning": reasoning},
+            timeout,
+        )
+        entries = [entry for entry in log_entries(url, timeout)
+                   if entry.get("content_id") == content_id]
+        results.append({
+            "status": status,
+            "content_id": content_id,
+            "guess": payload.get("guess"),
+            "confidence": payload.get("confidence"),
+            "model_score": payload.get("model_score"),
+            "style_score": payload.get("style_score"),
+            "label": payload.get("label"),
+            "appeal_status": appeal_status,
+            "appeal": appeal_payload,
+            "log_statuses": [entry.get("status") for entry in entries],
+            "original_still_decided": any(entry.get("status") == "decided" for entry in entries),
+            "log_has_reasoning": any(
+                entry.get("status") == "under_review" and entry.get("reasoning") == reasoning
+                for entry in entries
+            ),
+            "sent": describe(body),
+        })
+
+    before = sum(
+        1 for entry in log_entries(url, timeout)
+        if entry.get("content_id") == unknown_id and entry.get("status") == "under_review"
+    )
+    appeal_status, appeal_payload = post_json(
+        url, "/appeal",
+        {"content_id": unknown_id, "reasoning": reasoning},
+        timeout,
+    )
+    after = sum(
+        1 for entry in log_entries(url, timeout)
+        if entry.get("content_id") == unknown_id and entry.get("status") == "under_review"
+    )
+    results.append({
+        "status": appeal_status,
+        "guess": None,
+        "content_id": unknown_id,
+        "appeal_status": appeal_status,
+        "appeal": appeal_payload,
+        "under_review_rows_before": before,
+        "under_review_rows_after": after,
+        "sent": unknown_id,
+    })
+    return results
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -112,29 +199,53 @@ def main():
 
         trials = []
         for trial in range(1, args.trials + 1):
-            results = []
-            for i, body in enumerate(bodies_for(scenario), 1):
-                preview = describe(body)
+            if scenario.get("then_appeal"):
                 try:
-                    response = requests.post(f"{args.url}/submit", json=body,
-                                             timeout=args.timeout)
-                    payload = response.json() if response.content else {}
-                    results.append({
-                        "status": response.status_code,
-                        "guess": payload.get("guess"),
-                        "confidence": payload.get("confidence"),
-                        "model_score": payload.get("model_score"),
-                        "style_score": payload.get("style_score"),
-                        "label": payload.get("label"),
-                        "sent": preview,
-                    })
+                    results = run_appeal_trial(scenario, args.url, args.timeout)
                 except Exception as exc:  # noqa: BLE001
-                    results.append({"status": None, "error": f"{type(exc).__name__}: {exc}",
-                                    "sent": preview})
+                    results = [{"status": None, "error": f"{type(exc).__name__}: {exc}"}]
+            else:
+                results = []
+                for body in bodies_for(scenario):
+                    preview = describe(body)
+                    try:
+                        response = requests.post(f"{args.url}/submit", json=body,
+                                                 timeout=args.timeout)
+                        payload = response.json() if response.content else {}
+                        row = {
+                            "status": response.status_code,
+                            "content_id": payload.get("content_id"),
+                            "guess": payload.get("guess"),
+                            "confidence": payload.get("confidence"),
+                            "model_score": payload.get("model_score"),
+                            "style_score": payload.get("style_score"),
+                            "label": payload.get("label"),
+                            "sent": preview,
+                        }
+                        if scenario.get("bodies"):
+                            creator = body.get("creator_id", "unknown")
+                            if not isinstance(creator, str) or not creator.strip():
+                                creator = "unknown"
+                            decided = sum(
+                                1 for entry in log_entries(args.url, args.timeout)
+                                if entry.get("creator_id") == creator
+                                and entry.get("status") == "decided"
+                            )
+                            row["decided_rows_for_creator"] = decided
+                        results.append(row)
+                    except Exception as exc:  # noqa: BLE001
+                        results.append({"status": None, "error": f"{type(exc).__name__}: {exc}",
+                                        "sent": preview})
 
             trials.append(results)
-            guesses = [r.get("guess") or "—" for r in results]
-            print(f"  trial {trial}: {', '.join(guesses)}")
+            bits = []
+            for row in results:
+                guess = row.get("guess") or "—"
+                if row.get("appeal_status") is not None:
+                    bits.append(f"{guess}/{row.get('appeal_status')}")
+                else:
+                    bits.append(f"{row.get('status')}:{guess}")
+            print(f"  trial {trial}: {', '.join(bits)}")
 
         rows.append({"scenario": scenario, "trials": trials})
 

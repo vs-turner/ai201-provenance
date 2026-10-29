@@ -22,49 +22,79 @@ A scenario carries **either** of these:
               because you cannot express "the field is missing" as a string.
 """
 
+# Frozen before the three trials. Criterion 1 uses the bus paragraph and the
+# lab note already in the README, plus eight more notes in that same specific
+# voice, so the count is ten. Criterion 4 sets then_appeal. run_eval.py submits
+# each text, appeals the content_id that comes back, then appeals an id that
+# was never submitted. The stock runner only posts to /submit, so that path
+# was added there.
+
 SCENARIOS = [
     {
         "name": "my own writing",
         "criterion": 1,
-        # ⚠️ PUT YOUR OWN WRITING HERE. Not AI text, not a sample from the web —
-        # things you actually wrote. This is the criterion that matters most and
-        # it's meaningless with someone else's prose.
         "texts": [
-            "REPLACE ME with a paragraph you wrote yourself.",
-            "REPLACE ME with another one. Ten pieces is the usual number.",
+            "I missed the 6:40 bus again because the stop on Clement is a guess. The driver slowed, saw nobody he recognized, and kept going. I stood there with a wet sleeve and the same argument I have with myself every Tuesday: leave ten minutes earlier, or stop pretending 6:40 is a real plan.",
+            "The lab went fine until the last step. I mixed the two solutions and waited, and the color changed the way the handout said it would. I am still not sure why the third beaker stayed clear. Maybe I measured wrong. The writeup is due Friday.",
+            "The rice from Sunday is still in the blue pot, which I keep meaning to wash and then don't. I ate half of it cold over the sink because the microwave smells like the popcorn somebody burned in February. There is one clean fork. I used a spoon.",
+            "My hold on the camera manual finally came in, three weeks late, and the slip says I have until Thursday. The desk person had already started the next person's pile when I got there. I said my name twice. She found it under a book about knots.",
+            "I left the umbrella in the lecture hall, the black one with the bent rib, so the walk to the train was just me and a folder over my head. The folder is the draft with the red comments. The comments ran. I can still read most of them.",
+            "Nobody answered in the group chat until 11, and then it was only Maya saying she can do the chart if someone else writes the captions. I said I would. I have not started. The chart she sent is a screenshot of a spreadsheet with the columns cut off.",
+            "I went to the market for eggs and came back with eggs, a lime, and the wrong milk. The line was out the door because the card reader was down and the cashier was doing cash in her head. A kid in front of me bought one onion. Just one.",
+            "The radiator in the front room knocks twice and then hisses, which used to scare me and now just means the heat is coming. I put a towel on the windowsill where the draft comes in. The plant up there is leaning toward the lamp again. I turned the lamp.",
+            "My sister called while I was on the 22, and I missed it, then called her back from the stop at Fillmore. She wanted the name of the clinic Mom went to in March. I had it in a note. The note was on the other phone, the one with the cracked corner.",
+            "Alarm at 7:10, snooze, alarm at 7:19, and then I was awake because the upstairs neighbor dropped something heavy. Coffee was whatever was left in the pot. I added water. It tasted like the pot. I drank it on the steps while my socks got damp.",
+        ],
+    },
+    {
+        "name": "score spread",
+        "criterion": 2,
+        # First text is the uneven paragraph. Second is the flat generated prose.
+        # The gap is the second combined score minus the first.
+        "texts": [
+            "I missed the 6:40 bus again because the stop on Clement is a guess. The driver slowed, saw nobody he recognized, and kept going. I stood there with a wet sleeve and the same argument I have with myself every Tuesday: leave ten minutes earlier, or stop pretending 6:40 is a real plan.",
+            "The implementation of the proposed framework requires careful consideration of several key factors. First, it is important to note that the system must be able to handle a wide variety of different inputs. Additionally, the overall performance of the solution depends on a number of important variables. Furthermore, it is essential to ensure that the approach remains robust across a range of scenarios.",
         ],
     },
     {
         "name": "label coverage",
-        "criterion": 2,
-        # Inputs spread across your score range, so you can check all three
-        # labels are actually reachable.
+        "criterion": 3,
+        # Two expected human, two expected unsure, two expected AI.
         "texts": [
-            "REPLACE ME with something you're confident is AI-generated.",
-            "REPLACE ME with something you're confident is human-written.",
-            "REPLACE ME with something genuinely borderline.",
+            "I missed the 6:40 bus again because the stop on Clement is a guess. The driver slowed, saw nobody he recognized, and kept going. I stood there with a wet sleeve and the same argument I have with myself every Tuesday: leave ten minutes earlier, or stop pretending 6:40 is a real plan.",
+            "The lab went fine until the last step. I mixed the two solutions and waited, and the color changed the way the handout said it would. I am still not sure why the third beaker stayed clear. Maybe I measured wrong. The writeup is due Friday.",
+            "The implementation of the proposed framework requires careful consideration of several key factors. First, it is important to note that the system must be able to handle a wide variety of different inputs. Wait. Additionally, the overall performance of the solution depends on a number of important varibles. I keep typing that wrong and the spellcheck shrugs.",
+            "The implementation of the proposed framework requires careful consideration of several key factors. First, it is important to note that the system must be able to handle a wide variety of different inputs. Additionally, the overall performance of the solution depends on a number of important variables. Furthermore, it is essential to ensure that the approach remains robust across a range of scenarios.",
+            "The system provides a clear result. The system supports the user. The system handles the input. The system improves the output. The system meets the goal. The system follows the rule.",
+            "The process delivers a useful outcome. The process reduces the delay. The process keeps the record. The process checks the result. The process repeats the step. The process reports the status.",
         ],
     },
-    # A bad-input criterion looks like this. Uncomment and adjust if that's one
-    # of your five — these are raw request bodies, sent exactly as written.
-    #
-    # {
-    #     "name": "bad input",
-    #     "criterion": 3,
-    #     "bodies": [
-    #         {"text": "", "creator_id": "eval_bad_empty"},
-    #         {"creator_id": "eval_bad_missing"},          # no text field at all
-    #         {"text": "word " * 50000, "creator_id": "eval_bad_huge"},
-    #         {"text": None, "creator_id": "eval_bad_null"},
-    #     ],
-    # },
-
-    # TODO: add what your remaining criteria need.
-    #
-    # A criterion about the appeal path can't be tested by sending text alone;
-    # it needs a submission first and then an appeal against the content_id
-    # that came back. You'll need to test that one by hand, or extend this file
-    # and run_eval.py to do it. Saying which you did is part of the write-up.
+    {
+        "name": "appeal path",
+        "criterion": 4,
+        "texts": [
+            "I missed the 6:40 bus again because the stop on Clement is a guess. The driver slowed, saw nobody he recognized, and kept going.",
+            "The lab went fine until the last step. I mixed the two solutions and waited, and the color changed the way the handout said it would.",
+            "The rice from Sunday is still in the blue pot, which I keep meaning to wash and then don't. I ate half of it cold over the sink.",
+            "My hold on the camera manual finally came in, three weeks late, and the slip says I have until Thursday.",
+            "I left the umbrella in the lecture hall, the black one with the bent rib, so the walk to the train was just me and a folder over my head.",
+        ],
+        "then_appeal": {
+            "reasoning": "I wrote this myself. Please read it again.",
+            "unknown_id": "not-a-real-content-id",
+        },
+    },
+    {
+        "name": "bad input",
+        "criterion": 5,
+        "bodies": [
+            {"creator_id": "eval_bad_missing"},
+            {"text": "", "creator_id": "eval_bad_empty"},
+            {"text": None, "creator_id": "eval_bad_null"},
+            {"text": "a" * 8001, "creator_id": "eval_bad_huge"},
+            {"text": "hi", "creator_id": "eval_bad_short"},
+        ],
+    },
 ]
 
 
