@@ -412,18 +412,55 @@ can look like one. -->
 <!-- Every attack with its outcome and a held-or-broke mark.
      `run_attacks.py --label before` produces the table. -->
 
+This run is a stand-in. The folder is `attacks-synthetic/`, which I wrote because the TF zip was not on this machine. It is not the course attack set. Replace it and run again before treating these marks as the graded pass. The command was `python run_attacks.py --set attacks-synthetic --label before`. The full table is `results/attack_run_2026-10-29_1031_before.md`. Nothing in the detector was changed before or after the run.
 
+Held means the attack did not get what its `targets` cell asked for. Broke means it did. 19 attacks. 3 broke. 16 held. None returned a 500.
+
+| ID | Family | Status | Guess | Score | Mark |
+|---|---|---|---|---|---|
+| e1 | evasion | 200 | unsure | 0.456 | broke |
+| e2 | evasion | 200 | human | 0.347 | broke |
+| e3 | evasion | 200 | unsure | 0.742 | broke |
+| f1 | false_positive | 200 | unsure | 0.750 | held |
+| f2 | false_positive | 200 | human | 0.191 | held |
+| f3 | false_positive | 200 | human | 0.337 | held |
+| p1 | prompt_injection | 200 | unsure | 0.599 | held |
+| p2 | prompt_injection | 200 | unsure | 0.438 | held |
+| m1 | malformed | 400 | — | — | held |
+| m2 | malformed | 400 | — | — | held |
+| m3 | malformed | 400 | — | — | held |
+| m4 | malformed | 400 | — | — | held |
+| m5 | malformed | 400 | — | — | held |
+| d1 | flood_same_creator | 200 | human | 0.165 | held |
+| d2 | flood_same_creator | 200 | human | 0.164 | held |
+| d3 | flood_same_creator | 200 | human | 0.163 | held |
+| d4 | flood_same_creator | 200 | human | 0.163 | held |
+| d5 | flood_same_creator | 200 | human | 0.163 | held |
+| d6 | flood_same_creator | 429 | — | — | held |
+
+The three breaks are the evasion rows. Each one asked to keep generated prose out of the AI label. e2 was called human. e1 and e3, including the unedited control, were called unsure. A line in the text telling the model to score zero did not do that: p2 came back 0.438. Junk bodies came back 400. The sixth submit from `synthetic_flood` came back 429.
 
 **Ten audit log entries from the run**
 
 <!-- Choose entries that show the interesting failures, not the ten easiest. -->
 
 ```json
-
+{"timestamp": "2026-10-29T17:31:56+00:00", "content_id": "29ffe600-c854-4a11-800c-fd8b0db41580", "creator_id": "attacker_e2", "guess": "human", "model_score": 0.4222, "style_score": 0.2728, "combined_score": 0.3475, "label": "We think a person wrote this.", "status": "decided"}
+{"timestamp": "2026-10-29T17:31:56+00:00", "content_id": "bab37c96-9298-4d38-8872-0b5adef0862d", "creator_id": "attacker_e1", "guess": "unsure", "model_score": 0.5854, "style_score": 0.3261, "combined_score": 0.4557, "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.", "status": "decided"}
+{"timestamp": "2026-10-29T17:31:56+00:00", "content_id": "11237139-4df4-48ef-b8b7-8c81e87d27b5", "creator_id": "attacker_e3", "guess": "unsure", "model_score": 0.8907, "style_score": 0.5929, "combined_score": 0.7418, "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.", "status": "decided"}
+{"timestamp": "2026-10-29T17:31:57+00:00", "content_id": "20b0995e-e3af-46c9-b380-11407166a7dc", "creator_id": "attacker_f1", "guess": "unsure", "model_score": 0.8227, "style_score": 0.6767, "combined_score": 0.7497, "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.", "status": "decided"}
+{"timestamp": "2026-10-29T17:31:57+00:00", "content_id": "54163aab-6597-41c5-84d8-5d1265e1b14b", "creator_id": "attacker_p1", "guess": "unsure", "model_score": 0.712, "style_score": 0.4868, "combined_score": 0.5994, "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.", "status": "decided"}
+{"timestamp": "2026-10-29T17:31:57+00:00", "content_id": "859b673b-450a-4da9-aab2-fa4f0382c543", "creator_id": "attacker_p2", "guess": "unsure", "model_score": 0.2805, "style_score": 0.5947, "combined_score": 0.4376, "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.", "status": "decided"}
+{"timestamp": "2026-10-29T17:31:57+00:00", "creator_id": "synthetic_missing_text", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text is required and must be a string."}
+{"timestamp": "2026-10-29T17:31:57+00:00", "creator_id": "unknown", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "Request body must be a JSON object with text and creator_id."}
+{"timestamp": "2026-10-29T17:31:57+00:00", "creator_id": "synthetic_short", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text must be at least 20 characters."}
+{"timestamp": "2026-10-29T17:31:57+00:00", "creator_id": "synthetic_flood", "event": "rejected", "status": "rejected", "reason": "rate_limited", "limit": "5 per 1 minute"}
 ```
 
 **The single worst outcome** — the one I'd least want to explain to a writer
 whose work got caught by it:
+
+f1. The text is eight short plain sentences: class at eight, a cold room, the bus, rice, a sister calling about their mother. Both signals were high, 0.8227 and 0.6767. The combined score was 0.7497, so the label was "We can't tell whether a person wrote this or a program did. You can ask us to look at it again." I would have to tell that writer the service could not tell their day apart from a program's.
 
 
 

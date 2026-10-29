@@ -1,0 +1,12 @@
+id,family,targets,raw_body,send_as,content_type
+m1,malformed,Crash the route or get a 500 by omitting text.,"{""creator_id"": ""synthetic_missing_text""}",json,application/json
+m2,malformed,Crash the route or get a 500 with empty text.,"{""text"": """", ""creator_id"": ""synthetic_empty""}",json,application/json
+m3,malformed,Crash the route or get a 500 with null text.,"{""text"": null, ""creator_id"": ""synthetic_null""}",json,application/json
+m4,malformed,Crash the route or get a 500 with a body that is not JSON.,"{not json",raw,application/json
+m5,malformed,Crash the route or get a 500 with text that is too short to score.,"{""text"": ""hi"", ""creator_id"": ""synthetic_short""}",json,application/json
+d1,flood_same_creator,Get a sixth submission from one creator accepted.,"{""text"": ""This is flood note one from the same creator, long enough to score."", ""creator_id"": ""synthetic_flood""}",json,application/json
+d2,flood_same_creator,Get a sixth submission from one creator accepted.,"{""text"": ""This is flood note two from the same creator, long enough to score."", ""creator_id"": ""synthetic_flood""}",json,application/json
+d3,flood_same_creator,Get a sixth submission from one creator accepted.,"{""text"": ""This is flood note three from the same creator, long enough to score."", ""creator_id"": ""synthetic_flood""}",json,application/json
+d4,flood_same_creator,Get a sixth submission from one creator accepted.,"{""text"": ""This is flood note four from the same creator, long enough to score."", ""creator_id"": ""synthetic_flood""}",json,application/json
+d5,flood_same_creator,Get a sixth submission from one creator accepted.,"{""text"": ""This is flood note five from the same creator, long enough to score."", ""creator_id"": ""synthetic_flood""}",json,application/json
+d6,flood_same_creator,Get a sixth submission from one creator accepted.,"{""text"": ""This is flood note six from the same creator, long enough to score."", ""creator_id"": ""synthetic_flood""}",json,application/json
