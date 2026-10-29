@@ -43,7 +43,7 @@ A piece of text goes through seven steps. Each one adds something the next step 
 1. `POST /submit` hits `app.py`. The route reads `text` and `creator_id`. A missing, empty, tiny, or huge `text` stops here with HTTP 400 and a rejection in the log. A usable body gets a new `content_id`.
 2. `detector.model_signal` runs local `gpt2` on the text and adds `model_score`, from 0 to 1. Higher means the model found the text easy to predict.
 3. `stylometry.style_signal` measures the text as text and adds `style_score`, on the same 0 to 1 scale. Higher means the shape looks more like generated prose.
-4. `scoring.combine_signals` turns those two numbers into one combined score. A 0.5 / 0.5 average. When the two signals split, the score sits in the middle.
+4. `scoring.combine_signals` turns those two numbers into one combined score. The model score counts for 0.7 and the style score for 0.3. When the two signals split, the score sits closer to the model score.
 5. `scoring.score_to_label` turns that score into `guess` and the sentence a reader sees. 0.35 and below is human. Above 0.35 and below 0.80 is unsure. 0.80 and above is AI.
 6. `audit.log_decision` appends one log line: timestamp, content id, creator, guess, both signal scores, the combined score, the label text, and `status` `"decided"`.
 7. The route returns that decision as JSON. If the writer disagrees, `POST /appeal` looks up the `content_id`, appends a new log line with `status` `"under_review"`, and tells them the appeal was recorded. The original decision stays in the log.
@@ -132,11 +132,11 @@ Those three AI-direction scores are combined as 0.50 spread, 0.25 type-token rat
 <!-- Write the rule in words, then give the numbers. What happens when the two
      signals disagree? -->
 
-**The rule:** Average the two scores with equal weight. When they disagree, the result sits between them, which is the unsure band. Neither signal gets to overrule the other. Each one is blind where the other can still see something: the model signal misses plain human prose, and the style signal misses meaning and can be shoved around by typos.
+**The rule:** Weighted average. The model score counts for 0.7 and the style score for 0.3. When they disagree, the result sits closer to the model score. The style score still moves it. It does not get an equal vote, because on the unedited framework paragraph that vote pulled a model score of 0.8907 down to 0.7418.
 
-**The numbers:** `WEIGHT_MODEL_SIGNAL` 0.5 and `WEIGHT_STYLE_SIGNAL` 0.5 in `config.py`. Human at or below 0.35. Unsure above 0.35 and below 0.80. AI at or above 0.80. Those cuts are `HUMAN_THRESHOLD` and `AI_THRESHOLD` in `config.py`. The sentences a reader sees are in Label Variants.
+**The numbers:** `WEIGHT_MODEL_SIGNAL` 0.7 and `WEIGHT_STYLE_SIGNAL` 0.3 in `config.py`. Before this change both were 0.5. Human at or below 0.35. Unsure above 0.35 and below 0.80. AI at or above 0.80. Those cuts are `HUMAN_THRESHOLD` and `AI_THRESHOLD` in `config.py`. The sentences a reader sees are in Label Variants.
 
-On the two texts I am treating as the ends of the scale, the combined scores were 0.7418 (flat generated prose) and 0.1907 (the bus paragraph). The gap is 0.5511.
+On the two texts I am treating as the ends of the scale, the equal-weight combined scores were 0.7418 (flat generated prose) and 0.1907 (the bus paragraph). The gap was 0.5511. Those numbers are the before measurement.
 
 **Where it lives:** `scoring.py::combine_signals`
 
@@ -921,18 +921,61 @@ e3. Stage: the label mapping. Mechanism: the AI line is 0.80, and the combining 
 
 **What I changed:**
 
+`WEIGHT_MODEL_SIGNAL` went from 0.5 to 0.7. `WEIGHT_STYLE_SIGNAL` went from 0.5 to 0.3. Both live in `config.py` and are read by `scoring.py::combine_signals`. The signals, the thresholds, and the label sentences are the same as the before run. On the same texts, `model_score` and `style_score` came back identical. Only the average moved.
+
 **Which diagnosis pointed at it:**
+
+e3. The unedited framework paragraph had `model_score` 0.8907 and `style_score` 0.5929. Equal weight put the average at 0.7418, under the AI line of 0.80. The style score was the one pulling it down. 0.7 times 0.8907 plus 0.3 times 0.5929 is 0.8014, which clears that line. I did not lower the line, because the plain note sits at 0.7497 and a lower line would have called that note AI too.
 
 ### Attack Run — After
 
 <!-- Same format. `run_attacks.py --label after` -->
 
+`python run_attacks.py --set attacks-synthetic --label after`. Full table: `results/attack_run_2026-10-29_1200_after.md`. 19 attacks. 2 broke. 17 held. None returned a 500.
 
+| ID | Before | After | Mark before | Mark after |
+|---|---|---|---|---|
+| e1 | unsure 0.456 | unsure 0.508 | broke | broke |
+| e2 | human 0.347 | unsure 0.377 | broke | broke |
+| e3 | unsure 0.742 | ai 0.801 | broke | held |
+| f1 | unsure 0.750 | unsure 0.779 | held | held |
+| f2 | human 0.191 | human 0.187 | held | held |
+| f3 | human 0.337 | human 0.301 | held | held |
+| p1 | unsure 0.599 | unsure 0.644 | held | held |
+| p2 | unsure 0.438 | unsure 0.375 | held | held |
+| m1 | 400 | 400 | held | held |
+| m2 | 400 | 400 | held | held |
+| m3 | 400 | 400 | held | held |
+| m4 | 400 | 400 | held | held |
+| m5 | 400 | 400 | held | held |
+| d1 | human 0.165 | human 0.108 | held | held |
+| d2 | human 0.164 | human 0.106 | held | held |
+| d3 | human 0.163 | human 0.105 | held | held |
+| d4 | human 0.163 | human 0.105 | held | held |
+| d5 | human 0.163 | human 0.105 | held | held |
+| d6 | 429 | 429 | held | held |
+
+The after signal scores on the three broken-before rows, unchanged from the before run: e1 model 0.5854 style 0.3261, combined now 0.5076. e2 model 0.4222 style 0.2728, combined now 0.3774. e3 model 0.8907 style 0.5929, combined now 0.8014.
+
+### Criteria — After
+
+`python run_eval.py --label after`. Three trials, identical to each other. Full output: `results/run_2026-10-29_1200_after.md`.
+
+| Criterion | Target | Before | After | Verdict |
+|---|---|---|---|---|
+| 1. False positives on my own writing | at most 1 of 10 with guess ai | 0/10, 0/10, 0/10 | 0/10, 0/10, 0/10 | MET |
+| 2. Score spread | gap at least 0.30 | 0.5511, 0.5511, 0.5511 | 0.6141, 0.6141, 0.6141 | MET |
+| 3. All three labels reachable | human, unsure, and ai each appear | 3/3, 3/3, 3/3 | 3/3, 3/3, 3/3 | MET |
+| 4. Appeal recorded, unknown id refused | 5 of 5 under_review, unknown id 404 | 5/5 and 404, three times | 5/5 and 404, three times | MET |
+| 5. Bad input refused | 5 of 5 HTTP 400, none decided | 5/5, 5/5, 5/5 | 5/5, 5/5, 5/5 | MET |
+
+Criterion 2 after is 0.8014 minus 0.1873. Criterion 3 still has all three labels, and the mix changed. The six guesses are now human, human, unsure, ai, unsure, unsure, at 0.1873, 0.3171, 0.5076, 0.8014, 0.7852, and 0.7587. The two even-sentence passages that were AI at 0.8206 and 0.8017 are now unsure. The framework paragraph is the one that carries the AI label.
 
 **Did it help, and how do I know:**
 
-<!-- Widening the unsure band usually fixes one problem and creates another.
-     Reporting that trade honestly is worth full credit. -->
+It fixed one of the three breaks: e3 is now labeled AI, and e1 and e2 still are not. e2 did move from human (0.3475) to unsure (0.3774).
+
+The cost is on the other side of the same weight. Both even passages had a style score of 0.9093. At equal weight that pulled model scores of 0.7320 and 0.6941 over 0.80. At weight 0.3 the averages are 0.7852 and 0.7587, both unsure. The plain note moved from 0.7497 to 0.7789. It is still unsure, and it is closer to the AI line.
 
 
 

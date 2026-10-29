@@ -50,11 +50,13 @@ DETECTOR_MAX_TOKENS = 400
 # ─── Scoring (Milestone 4) ───────────────────────────────────────────────────
 # How much each signal counts toward the combined score.
 #
-# Equal weights, chosen before this was coded. A split averages into the
-# middle. The README section "The combining rule" is the written version.
+# Unit 8, one change. Was 0.5 / 0.5. The style score was pulling the unedited
+# framework paragraph from a model score of 0.8907 down to a combined 0.7418,
+# under the AI line. Model weight 0.7 and style weight 0.3 put that average
+# just over 0.80. The README section "The combining rule" is the written version.
 
-WEIGHT_MODEL_SIGNAL = 0.5
-WEIGHT_STYLE_SIGNAL = 0.5
+WEIGHT_MODEL_SIGNAL = 0.7
+WEIGHT_STYLE_SIGNAL = 0.3
 
 
 # ─── Thresholds (Milestone 5) ────────────────────────────────────────────────
