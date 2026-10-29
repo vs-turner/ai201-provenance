@@ -379,7 +379,7 @@ HTTP 200.
 
 ## Rate Limiting
 
-**My limits:** ___ per minute, ___ per day
+**My limits:** 5 per minute, 60 per day
 
 **Why those numbers and not others:**
 <!-- Think about two people: a real writer submitting their own work a few
@@ -387,17 +387,23 @@ HTTP 200.
      thresholds. Your numbers have to be liveable for the first and hostile to
      the second. -->
 
+A writer revising one piece may send it again a few times in a minute, and a few times an hour across a day. Five a minute covers that burst, including a double submit. Sixty a day is a few an hour through a long editing day. A script sending a thousand variations to find the cutoffs spends the minute cap in one burst. The flood below is that script: 15 sends from one creator, five accepted, ten refused.
+
 **What a caller counts as:** <!-- per address, or per creator_id? They fail
 differently — one script can look like a thousand callers, and one household
 can look like one. -->
+
+`creator_id`, when the body includes a non-empty one. If that field is missing or blank, the caller's address is the bucket. A script that invents a new `creator_id` on every request is a new caller each time. Two people in one house, each with their own `creator_id`, are counted apart. Requests with no `creator_id` from the same machine share one bucket.
 
 **The run of status codes when I pushed past it:**
 
 <!-- python run_attacks.py --flood 15 -->
 
 ```
-
+200 200 200 200 200 429 429 429 429 429 429 429 429 429 429
 ```
+
+`GET /health` reported `rate_limiting: true`. The ten 429s are in the audit log as `reason` `"rate_limited"`, limit `"5 per 1 minute"`. `results/flood_2026-10-28_1536.md` is the same run.
 
 ---
 
