@@ -120,3 +120,86 @@ These 5 request bodies each return HTTP 400. None of them is logged with `status
      A number you missed stays where it is, gets diagnosed, and gets a fix
      attempted. That's where the points are.
      ───────────────────────────────────────────────────────────────────────── -->
+
+---
+
+# Capstone — Shape A (instrument the run path)
+
+Five criteria for the ops layer. Written **before** the instrumentation change.
+At least three are about what is new: latency on the log, structured fields,
+and cost measured as compute time. The last two check that Path B still starts
+and that a bad body still leaves a rejection row (not a silent miss).
+
+Three trials each. The target has to hold in every trial.
+
+---
+
+## C1. Every scored submit writes `latency_ms`
+
+I freeze 10 texts (the same ten from criterion 1 in unit 7). I submit each one
+with a unique `creator_id`. In each of the 3 trials, all 10 matching log rows
+with `status` `"decided"` include a numeric `latency_ms` field, and that number
+is greater than 0.
+
+**Why this target:** Shape A is the ops layer. If the decision is in the log
+but the time is missing, I cannot answer how long a run took without adding
+code. Greater than 0 stops a stub that always writes 0.
+
+---
+
+## C2. A decided row names what came in and what came out
+
+For those same 10 submits, in each trial, every `decided` row has all of these
+named fields: `timestamp`, `creator_id`, `text_chars` (character count of the
+text I sent), `guess`, `model_score`, `style_score`, `combined_score`,
+`latency_ms`, `status`.
+
+**Why this target:** Observability means I can answer a question from the log
+alone. `text_chars` is the input side without pasting the whole paragraph into
+every line. The scores and `guess` are the output side. If any field is
+missing, the row is not the record I claimed in The Shape.
+
+---
+
+## C3. Cost per run stays under 3.0 seconds on a warm service
+
+Cost is wall-clock seconds for one `POST /submit`, measured with
+`time.perf_counter` around the HTTP call in the client. I send one warm-up
+submit first and discard it. Then I time the same 10 frozen texts. In each of
+the 3 trials, the median of those 10 timings is at most 3.0 seconds.
+
+**Why this target:** The unit asks for a measured cost, not a guess from the
+docs. Local gpt2 has no API spend, so seconds of compute are the cost. The
+first request after a cold start loads the model and can take much longer; I am
+measuring warm runs on purpose, and I say so here. 3.0 seconds is above the
+one-to-two-second passes I already saw, and below a hang.
+
+---
+
+## C4. A refused body still leaves a timed rejection row
+
+I send these 3 bad bodies once per trial: no `text` field; `"text": ""`;
+`"text": "hi"` (under 20 characters). Each returns HTTP 400. In each trial, the
+audit log gains 3 new rows with `status` `"rejected"`, `reason` `"bad_input"`,
+and a numeric `latency_ms` greater than 0. None of those three is logged with
+`status` `"decided"`.
+
+**Why this target:** Unit 8 already required rejections in the log. The
+extension adds time to that path too. A 400 with no row still looks like a
+quiet minute. A rejection without `latency_ms` means I only instrumented the
+happy path.
+
+---
+
+## C5. Path B starts from the documented command
+
+From the project venv, I run `python app.py` the way [RUNNING.md](RUNNING.md)
+says. Within 15 seconds of that process starting, `GET /health` returns HTTP
+200 with JSON where `ok` is true and `rate_limiting` is true. I repeat that
+start-and-check three times (stop the process between trials). All 3 trials
+pass.
+
+**Why this target:** Path B is the deploy. If I cannot start the service from
+the written command and see it healthy, the log and the cost numbers do not
+matter. Fifteen seconds is for process boot, not for loading gpt2 into a
+submit.
