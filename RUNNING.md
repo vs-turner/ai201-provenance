@@ -348,3 +348,7 @@ curl -X POST http://127.0.0.1:5000/submit \
 Append-only decisions and rejections: `logs/audit.jsonl` (committed on purpose).
 Capstone criteria and measured runs go under `results/` the same way unit 8 did.
 Paste log extracts into the README in the same session you produce them.
+
+A `decided` row from `/submit` now also carries `text_chars` (length of the
+submitted text) and `latency_ms` (server time for that request). A `rejected`
+row from bad input or a rate limit carries `latency_ms` the same way.

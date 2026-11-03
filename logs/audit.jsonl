@@ -264,3 +264,5 @@
 {"timestamp": "2026-10-29T19:00:59+00:00", "creator_id": "eval_bad_null", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text is required and must be a string."}
 {"timestamp": "2026-10-29T19:00:59+00:00", "creator_id": "eval_bad_huge", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text must be at most 8000 characters."}
 {"timestamp": "2026-10-29T19:00:59+00:00", "creator_id": "eval_bad_short", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text must be at least 20 characters."}
+{"timestamp": "2026-11-03T19:03:07+00:00", "content_id": "03e04d3d-d5d8-437c-b50e-f91ce4a76746", "creator_id": "capstone_build_ok", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 6619.985}
+{"timestamp": "2026-11-03T19:03:07+00:00", "creator_id": "capstone_build_bad", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text is required and must be a string.", "latency_ms": 1.561}
