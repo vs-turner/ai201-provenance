@@ -1034,6 +1034,27 @@ I would leave the AI line at 0.80, so a plain note near 0.78 stays unsure and mo
 
 One piece of work: instrument the existing run path and measure it. Not a new detector. Build time for the code change should stay under about ninety minutes; the rest of the unit is criteria, three-trial runs, diagnosis, and one measured improvement.
 
+### Demo — extension and original path
+
+`/ping` still answers. A normal `/submit` still returns `guess`, both signal scores, and `combined_score`. A body with no `text` still returns HTTP 400. What is new is on the log: `text_chars` and `latency_ms` on the decision, and `latency_ms` on the rejection.
+
+```json
+{"ok": true, "service": "provenance-guard", "you_sent": "hello"}
+```
+
+```json
+{"combined_score": 0.186, "confidence": 0.186, "content_id": "f2118302-9f8c-465a-8791-f95700a2e4b3", "guess": "human", "label": "We think a person wrote this.", "model_score": 0.1272, "style_score": 0.3232}
+```
+
+```json
+{"error": "bad_input", "message": "text is required and must be a string."}
+```
+
+```json
+{"timestamp": "2026-11-03T21:26:51+00:00", "content_id": "f2118302-9f8c-465a-8791-f95700a2e4b3", "creator_id": "demo_ok", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 33.404}
+{"timestamp": "2026-11-03T21:26:51+00:00", "creator_id": "demo_bad", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text is required and must be a string.", "latency_ms": 0.187}
+```
+
 
 
 <!-- ═════════════════════════════════════════════════════════════════════
