@@ -1010,6 +1010,32 @@ I would leave the AI line at 0.80, so a plain note near 0.78 stays unsure and mo
 
 
 
+<!-- ═══════════════════════ CAPSTONE — THE EXTENSION ═══════════════════════ -->
+
+---
+
+## The Shape
+
+**System I'm extending:** Provenance Guard (this repository).
+
+**Shape:** A — deploy and instrument.
+
+**What I'm adding:** An operational layer around the existing `/submit` path. Every decision and rejection already writes to `logs/audit.jsonl`. I'm extending those records so each one also carries how long the request took (`latency_ms`) and enough named fields to answer what came in and what came out after the fact. I'm measuring cost per run as wall-clock seconds of compute on a fixed batch of submissions, from a real session, not from a doc estimate. The service stays local: Path B in [RUNNING.md](RUNNING.md), one documented start command, committed log extract, Python version and model size called out.
+
+**When I'm finished, I'll claim:** someone can start this service from a clean checkout, send text through `/submit`, and later read structured records that show latency and the decision fields without adding new code first.
+
+### What's out of scope
+
+1. I'm not changing the two signals, the 0.7 / 0.3 weights, or the 0.35 / 0.80 thresholds. Unit 8 already measured that trade.
+2. I'm not hosting this on a free tier. Local gpt2 is about 550 MB loaded; Path B is the run path.
+3. I'm not adding a third signal, a new label, or a `/metrics` UI. Shape A is the ops layer only.
+
+### Size check
+
+One piece of work: instrument the existing run path and measure it. Not a new detector. Build time for the code change should stay under about ninety minutes; the rest of the unit is criteria, three-trial runs, diagnosis, and one measured improvement.
+
+
+
 <!-- ═════════════════════════════════════════════════════════════════════
 
      SUBMISSION CHECKLIST — unit 7

@@ -306,3 +306,45 @@ is evidence, and the entries you paste into your README are what unit 8 grades.
 
 **Do not delete and recreate this repository.** You submit the same URL both
 units.
+
+---
+
+## Capstone run path — Path B (local with logs)
+
+This service is **not** deployed to a host for the capstone. It runs on your
+machine. That is Path B, and it is intentional: signal one loads local `gpt2`
+(~550 MB download; several hundred MB resident once loaded), which does not
+fit a 512 MB free instance.
+
+### Exact start command
+
+From a clean checkout, after the "Before your first class" setup above:
+
+```bash
+source .venv/bin/activate
+python app.py
+```
+
+Leave that terminal open. In a second terminal, with the same venv active:
+
+```bash
+curl -X POST http://127.0.0.1:5000/submit \
+  -H "Content-Type: application/json" \
+  -d '{"text": "I missed the 6:40 bus again because the stop on Clement is a guess.", "creator_id": "capstone"}'
+```
+
+### Environment
+
+| Need | What |
+|---|---|
+| Python | 3.11–3.13 (this machine uses 3.12 from the project `.venv`) |
+| Dependencies | `pip install -r requirements.txt` (pinned in that file) |
+| Model | `gpt2` via Hugging Face, downloaded once by `python detector.py` (~550 MB on disk) |
+| Network | Not required at request time after the model is cached |
+| API key | None |
+
+### Where the record lives
+
+Append-only decisions and rejections: `logs/audit.jsonl` (committed on purpose).
+Capstone criteria and measured runs go under `results/` the same way unit 8 did.
+Paste log extracts into the README in the same session you produce them.
