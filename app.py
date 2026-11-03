@@ -125,6 +125,7 @@ if config.RATE_LIMITING_ENABLED:
             creator_id=payload.get("creator_id", "unknown"),
             reason="rate_limited",
             limit=str(exc.description),
+            latency_ms=_latency_ms(),
         )
         return jsonify({
             "error": "rate_limited",
@@ -182,7 +183,12 @@ def _reject_input(message: str):
         raw = payload.get("creator_id")
         if isinstance(raw, str) and raw.strip():
             creator_id = raw.strip()
-    audit.log_rejection(creator_id=creator_id, reason="bad_input", message=message)
+    audit.log_rejection(
+        creator_id=creator_id,
+        reason="bad_input",
+        message=message,
+        latency_ms=_latency_ms(),
+    )
     return jsonify({"error": "bad_input", "message": message}), 400
 
 
