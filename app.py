@@ -24,9 +24,10 @@ Routes:
     GET  /health      is the service up, and is the model loaded
 """
 
+import time
 import uuid
 
-from flask import Flask, jsonify, request
+from flask import Flask, g, jsonify, request
 
 import audit
 import config
@@ -35,6 +36,20 @@ import scoring
 import stylometry
 
 app = Flask(__name__)
+
+
+@app.before_request
+def _mark_request_start():
+    """Capstone Shape A: every request gets a start time for latency_ms."""
+    g.request_started = time.perf_counter()
+
+
+def _latency_ms() -> float:
+    """Milliseconds since this request hit the service. Capstone instrumentation."""
+    started = getattr(g, "request_started", None)
+    if started is None:
+        return 0.0
+    return round((time.perf_counter() - started) * 1000.0, 3)
 
 
 # ── Rate limiting — UNIT 8 ────────────────────────────────────────────────────
@@ -257,6 +272,8 @@ def submit():
         combined_score=combined_score,
         label=label,
         status="decided",
+        text_chars=len(text),
+        latency_ms=_latency_ms(),
     )
     return jsonify({
         "content_id": content_id,
