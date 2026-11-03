@@ -1055,6 +1055,40 @@ One piece of work: instrument the existing run path and measure it. Not a new de
 {"timestamp": "2026-11-03T21:26:51+00:00", "creator_id": "demo_bad", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text is required and must be a string.", "latency_ms": 0.187}
 ```
 
+---
+
+## Instrumentation
+
+**Path:** B — local with logs. I did not host this. Local `gpt2` is hundreds of MB resident, past a 512 MB free instance. The start command, Python version, model size, and the two failures I hit on a clean clone (wrong Python, AirPlay on port 5000) are in [RUNNING.md](RUNNING.md).
+
+**What each run records:** append-only JSON lines in `logs/audit.jsonl`. A `decided` row has `timestamp`, `content_id`, `creator_id`, `text_chars` (input size), `guess`, `model_score`, `style_score`, `combined_score`, `label`, `status`, and `latency_ms` (server duration). A failure row has `timestamp`, `creator_id`, `event` `"rejected"`, `status` `"rejected"`, `reason`, `message` or `limit`, and `latency_ms`. Rejections are written on purpose so a bad body is not a quiet gap in the file.
+
+**Ten log entries from a real session** (10 warm submits of the same bus paragraph, then 3 refused bodies):
+
+```json
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "94670248-5d7d-4201-8bf3-686a89653510", "creator_id": "cost_run_1", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 60.367}
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "32bb361a-fe4c-4601-98d3-79d6a2cddeb8", "creator_id": "cost_run_2", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 47.763}
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "18b1af53-0bb3-4ab5-a350-d192042f3756", "creator_id": "cost_run_3", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 45.364}
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "2801c9f0-9f11-4c71-8986-7d2852898724", "creator_id": "cost_run_4", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 52.857}
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "3937ef0c-4841-4516-a9ac-578aab399ec6", "creator_id": "cost_run_5", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 44.905}
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "aac3c099-b07f-47b3-80c3-7f3b0a62db6d", "creator_id": "cost_run_6", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 41.813}
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "29541310-1bca-484d-9686-f8fef3923ade", "creator_id": "cost_run_7", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 40.624}
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "ce39c704-cd76-4795-94f8-663656492448", "creator_id": "cost_run_8", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 41.563}
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "cf1cf957-e58f-4734-9a05-e4ef89ec14d9", "creator_id": "cost_run_9", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 44.321}
+{"timestamp": "2026-11-03T22:36:44+00:00", "content_id": "80c4dfee-36e1-4bc1-afcb-b7d1910c52f1", "creator_id": "cost_run_10", "guess": "human", "model_score": 0.1272, "style_score": 0.3232, "combined_score": 0.186, "label": "We think a person wrote this.", "status": "decided", "text_chars": 128, "latency_ms": 48.069}
+{"timestamp": "2026-11-03T22:36:44+00:00", "creator_id": "cost_bad_missing", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text is required and must be a string.", "latency_ms": 0.281}
+{"timestamp": "2026-11-03T22:36:44+00:00", "creator_id": "cost_bad_empty", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text must be at least 20 characters.", "latency_ms": 0.15}
+{"timestamp": "2026-11-03T22:36:44+00:00", "creator_id": "cost_bad_short", "event": "rejected", "status": "rejected", "reason": "bad_input", "message": "text must be at least 20 characters.", "latency_ms": 0.138}
+```
+
+---
+
+## What It Costs
+
+**Cost of one run:** **0.0484 seconds** of wall-clock compute, average of 10 warm `POST /submit` calls.
+
+**How I measured it:** There is no API spend. The model runs locally. I started the service, sent one warm-up submit and threw that timing away (10.4111 s while `gpt2` loaded). Then I timed 10 submits of the same bus paragraph with `time.perf_counter` around the HTTP client call. The ten times were 0.0626, 0.0492, 0.0475, 0.0550, 0.0465, 0.0432, 0.0420, 0.0429, 0.0455, 0.0495 seconds. Mean 0.0484 s. Median 0.0470 s. Min 0.0420 s. Max 0.0626 s. Server-side `latency_ms` on those same rows sat between about 40 and 60 ms.
+
 
 
 <!-- ═════════════════════════════════════════════════════════════════════

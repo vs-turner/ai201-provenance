@@ -316,13 +316,36 @@ machine. That is Path B, and it is intentional: signal one loads local `gpt2`
 (~550 MB download; several hundred MB resident once loaded), which does not
 fit a 512 MB free instance.
 
+I tried following these steps from a fresh clone of this repo into a new folder.
+Two things broke the first time. Both are written below so a reader hits them
+in the instructions instead of in the dark.
+
+1. **Python version.** `python3 -m venv .venv` only works if that `python3` is
+   3.11, 3.12, or 3.13. On this laptop the project venv is built with
+   `/opt/anaconda3/bin/python3.12`. If `python3 --version` prints 3.9 or 3.14,
+   use a 3.12 binary explicitly:  
+   `/opt/anaconda3/bin/python3.12 -m venv .venv`
+2. **Port 5000 on macOS.** After `python app.py`, `curl` to
+   `http://127.0.0.1:5000` sometimes returns HTTP 403 with an empty body and
+   `Server: AirTunes/...`. That is AirPlay Receiver holding `*:5000`, not the
+   Flask app. Either turn AirPlay Receiver off in System Settings, or start on
+   another port: `PORT=5001 python app.py` and curl `http://127.0.0.1:5001`.
+
 ### Exact start command
 
-From a clean checkout, after the "Before your first class" setup above:
+From a clean checkout:
 
 ```bash
-source .venv/bin/activate
+# Use a 3.11–3.13 interpreter (see note above).
+python3 -m venv .venv
+# or: /opt/anaconda3/bin/python3.12 -m venv .venv
+
+source .venv/bin/activate          # Windows: .venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python test.py
+python detector.py                 # ~550 MB first time; later runs use the cache
 python app.py
+# If port 5000 is AirTunes:  PORT=5001 python app.py
 ```
 
 Leave that terminal open. In a second terminal, with the same venv active:
@@ -333,15 +356,18 @@ curl -X POST http://127.0.0.1:5000/submit \
   -d '{"text": "I missed the 6:40 bus again because the stop on Clement is a guess.", "creator_id": "capstone"}'
 ```
 
+If you started with `PORT=5001`, change the host port in that curl to `5001`.
+
 ### Environment
 
 | Need | What |
 |---|---|
-| Python | 3.11–3.13 (this machine uses 3.12 from the project `.venv`) |
+| Python | 3.11–3.13 only (this machine: 3.12) |
 | Dependencies | `pip install -r requirements.txt` (pinned in that file) |
 | Model | `gpt2` via Hugging Face, downloaded once by `python detector.py` (~550 MB on disk) |
-| Network | Not required at request time after the model is cached |
+| Network | Needed once for pip and the model download; not required at request time after the cache is warm |
 | API key | None |
+| Disk / RAM | A few GB free; model load wants hundreds of MB resident |
 
 ### Where the record lives
 
