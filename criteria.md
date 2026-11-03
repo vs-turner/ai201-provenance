@@ -203,3 +203,28 @@ pass.
 the written command and see it healthy, the log and the cost numbers do not
 matter. Fifteen seconds is for process boot, not for loading gpt2 into a
 submit.
+
+> **Revised in capstone (still before the three-trial criteria run):** Start with
+> the command in RUNNING.md, including `PORT=5001 python app.py` when a curl to
+> port 5000 returns empty HTTP 403 from AirTunes. Health is checked on the same
+> port the process bound.
+>
+> **Why revised:** On this Mac, AirPlay Receiver holds `*:5000`. A fail on
+> `python app.py` alone would be measuring the OS port fight, not whether Path B
+> starts. The target is still "documented start → healthy within 15 s," three
+> times.
+
+---
+
+## Capstone criteria self-check
+
+| Check | Result |
+|---|---|
+| Five numbered criteria | C1–C5 |
+| Each has a number or plain observable | yes — counts, field lists, 3.0 s median, HTTP 400 + log rows, health within 15 s |
+| No soft words as the whole test (`works` / `fast` / `reliable`) | yes |
+| Why under each | yes |
+| At least three about the extension | C1, C2, C3 (and C4's `latency_ms` on rejects) |
+| At least one bad path | C4 — missing / empty / short `text` |
+| Three trials required | stated above |
+| Commit before results | `48034d3` is criteria-only; instrumentation and cost pastes came after |
