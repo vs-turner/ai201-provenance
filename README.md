@@ -1105,7 +1105,7 @@ Decided rows are written by `app.py::submit` → `audit.log_decision`. Rejection
 | 4. Refused body leaves timed rejection | 3 of 3 HTTP 400 + rejected + latency_ms > 0 | 3/3 | 3/3 | 3/3 | MET |
 | 5. Path B starts from documented command | healthy /health within 15 s | 0.433 s | 0.214 s | 0.213 s | MET |
 
-Trials 2 and 3 matched trial 1 on every pass/fail. The three C3 medians stayed under 0.06 s.
+Trials 2 and 3 matched trial 1 on every pass/fail. The three C3 medians stayed under 0.06 s. The model scores can match across trials because nothing in either signal is random; the three trials were still separate submits. Trial 1 / 2 / 3 each got new `content_id` values (for text 1: `85ebabf7…`, `b1b59a17…`, `2b2f54bb…`) and different `latency_ms` / client timings (see `results/capstone_criteria_2026-11-03_1623.json`).
 
 **Real output from trial 1 of each criterion**
 
