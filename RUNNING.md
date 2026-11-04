@@ -344,7 +344,7 @@ source .venv/bin/activate          # Windows: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python test.py
 python detector.py                 # ~550 MB first time; later runs use the cache
-python app.py
+python app.py                      # loads gpt2 at start (capstone); first submit stays warm
 # If port 5000 is AirTunes:  PORT=5001 python app.py
 ```
 

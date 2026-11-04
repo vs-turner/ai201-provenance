@@ -378,11 +378,25 @@ def get_log():
     return jsonify({"count": len(entries), "entries": entries})
 
 
+def preload_detector() -> None:
+    """
+    Capstone improvement: load gpt2 at process start.
+
+    Without this, the first /submit pays the model download/load cost (~10 s
+    here) while later submits sit around 50 ms. Path B "healthy" then meant
+    the port was open, not that the service was ready to score.
+    """
+    print(f"  loading detector ({config.DETECTOR_MODEL})…")
+    detector._load()
+    print("  detector ready.")
+
+
 def main():
     print(f"Provenance Guard on http://{config.HOST}:{config.PORT}")
     print(f"  detector model:  {config.DETECTOR_MODEL}")
     print(f"  rate limiting:   {'ON' if config.RATE_LIMITING_ENABLED else 'off (unit 8)'}")
     print(f"  audit log:       {config.AUDIT_LOG}")
+    preload_detector()
     print()
     print("Check it's alive:")
     print(f'  curl -X POST http://{config.HOST}:{config.PORT}/ping \\')

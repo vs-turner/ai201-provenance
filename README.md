@@ -1227,6 +1227,53 @@ Trials 2 and 3 matched trial 1 on every pass/fail. The three C3 medians stayed u
 }
 ```
 
+---
+
+## Capstone Diagnoses
+
+All five criteria are **MET**. Each target held in all three trials. No criterion miss, so there is no missed-target stage to name. How each verdict was decided:
+
+1. **MET.** Counted decided rows with numeric `latency_ms` > 0: 10/10, 10/10, 10/10.
+2. **MET.** Counted decided rows that had every required field: 10/10, 10/10, 10/10.
+3. **MET.** Median client wall-clock of the ten submits: 0.0578 s, 0.0568 s, 0.0582 s (target ≤ 3.0 s).
+4. **MET.** Three deliberate bad bodies each trial: all HTTP 400, three `rejected`/`bad_input` rows with `latency_ms` > 0, none `decided`.
+5. **MET.** Three separate starts: `/health` ok with `rate_limiting` true in 0.433 s, 0.214 s, 0.213 s (target ≤ 15 s).
+
+The target I would tighten is C3. 3.0 s is far above the measured ~0.06 s medians, so the criterion could not catch a real regression until the service was almost hung. A tighter line would be median ≤ 0.50 s on warm runs. The original C3 line stays.
+
+What the log still showed as an ops gap (not a criterion miss): the first `/submit` after a fresh process paid the model load. In the cost write-up that warm-up was 10.4111 s and discarded. On a fresh measure before the fix, the first submit was **5.9905 s** while `/health` still reported `detector_loaded: false`. **Stage:** signal one / `detector._load`. **Mechanism:** the model loads lazily on the first `model_signal` call, so Path B "healthy" meant the port was open, not that scoring was ready.
+
+---
+
+## Capstone Improvement
+
+**What I changed:** `app.py::preload_detector` calls `detector._load()` during `main()` before `app.run`. A process started the Path B way finishes loading gpt2 before it takes traffic.
+
+**Which diagnosis pointed at it:** the lazy-load gap above — first submit ~6–10 s with `detector_loaded: false` on health.
+
+### Capstone Run Log — After (side by side)
+
+Full after dump: `results/capstone_criteria_2026-11-03_1630_after.json`.
+
+| Criterion | Target | Before (R1 / R2 / R3) | After (R1 / R2 / R3) | Verdict after |
+|---|---|---|---|---|
+| 1. latency_ms on decided rows | 10/10 > 0 | 10/10 · 10/10 · 10/10 | 10/10 · 10/10 · 10/10 | MET |
+| 2. Full field set | 10/10 | 10/10 · 10/10 · 10/10 | 10/10 · 10/10 · 10/10 | MET |
+| 3. Warm median ≤ 3.0 s | median of 10 | 0.0578 · 0.0568 · 0.0582 s | 0.0598 · 0.0564 · 0.0562 s | MET |
+| 4. Bad body timed reject | 3/3 | 3/3 · 3/3 · 3/3 | 3/3 · 3/3 · 3/3 | MET |
+| 5. Path B start ≤ 15 s | healthy `/health` | 0.433 · 0.214 · 0.213 s | 5.122 · 4.311 · 4.320 s | MET |
+
+**First submit after a fresh start** (not a formal criterion; this is what the fix aimed at):
+
+| Measure | Before preload | After preload |
+|---|---|---|
+| First `/submit` wall-clock | 5.9905 s | 1.1497 s |
+| `/health` `detector_loaded` at ready | false | true |
+| Time until healthy `/health` | ~0.2–0.4 s (port only) | ~4.3–5.1 s (port + model) |
+
+**Did it help:** Yes for the first real score after start: 5.9905 s → 1.1497 s, and health now reports `detector_loaded: true` before traffic. The trade is a slower Path B boot: C5 went from ~0.2–0.4 s to ~4.3–5.1 s, still under the 15 s target. Warm medians (C3) did not move in a meaningful way.
+
+
 
 
 
