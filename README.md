@@ -361,29 +361,27 @@ HTTP 200.
 
 ## How I Used AI
 
-**Moment 1**
+I used the assistant as a pair for drafts and for reading my own numbers back to me. The commits and the log are what I kept. These are the places I pushed back.
 
-- *What I asked for:* Build the style signal in `stylometry.py`, average it with the model score in `scoring.py::combine_signals`, and write down one case where the two signals disagree.
-- *What came back:* Sentence-length spread, type-token ratio, and punctuation density, combined at 0.50 / 0.25 / 0.25. The two signals averaged at 0.5 / 0.5. The split case was invented: a dense paragraph with `model_score` 0.20, `style_score` 0.90, and an average of 0.55.
-- *What I changed:* I ran both signals on a real paragraph, the flat generated one with "Wait." inserted and `variables` spelled `varibles`. The measured scores were `model_score` 0.5854 and `style_score` 0.3261, average 0.4557. I deleted the invented 0.20 and 0.90 and put those measured numbers in the README. The combining rule stayed an equal average.
+**Moment 1 — the split case**
 
-**Moment 2**
+I asked it to build the style signal, average it with the model score in `scoring.py::combine_signals`, and invent one case where the two signals disagree. It gave me a made-up split: model 0.20, style 0.90, average 0.55. That felt too neat. I ran the real functions on the framework paragraph with "Wait." and `varibles` in it. I got model 0.5854 and style 0.3261, average 0.4557. I put those numbers in the README and threw out the invented ones.
 
-- *What I asked for:* Three full sentences for the labels, written for someone who has never heard the word "threshold," and wired from `scoring.py::score_to_label` into the `/submit` response.
-- *What came back:* The unsure sentence was "This one is too close to call. If you wrote it, you can ask us to review it."
-- *What I changed:* I rewrote that sentence. "Too close to call" does not say what is being decided, and "if you wrote it" sounds like a suspicion. The sentence in the README and in `score_to_label` is now "We can't tell whether a person wrote this or a program did. You can ask us to look at it again."
+**Moment 2 — the unsure label**
 
-**Moment 3**
+I asked for three label sentences a writer could read without knowing the word "threshold." The unsure draft said "This one is too close to call. If you wrote it, you can ask us to review it." I would have been confused, and then annoyed. I rewrote it to name the question (person or program) and to drop the "if you wrote it" dig. That version is what `score_to_label` returns now.
 
-- *What I asked for:* One change, taken from the e3 diagnosis, that would get the unedited framework paragraph over the AI line.
-- *What came back:* Lower `AI_THRESHOLD` so a combined score of 0.7418 counts as AI.
-- *What I changed:* I put that next to the plain class note, which scored 0.7497 at the old weights. A line low enough to catch the paragraph would also call that note AI. I left the line at 0.80 and changed the weights from 0.5 / 0.5 to 0.7 / 0.3.
+**Moment 3 — the weight change**
 
-**Moment 4**
+After e3 stayed unsure at 0.7418, I asked what one change would push the unedited framework paragraph over the AI line. It said lower `AI_THRESHOLD`. I checked the plain class note at 0.7497. A lower line would have called that note AI too. I left the line at 0.80 and moved the weights to 0.7 / 0.3 instead.
 
-- *What I asked for:* Why e1, e2, and e3 got through, with a stage and a mechanism for each.
-- *What came back:* One explanation for all three. Typos raise word variety, the style signal reads that as a person, and the average drops.
-- *What I changed:* I counted the words in each sentence. e1 was 13, 20, 1, 14, 9, and its model score fell from 0.8907 to 0.5854 while the style score was 0.3261. e3 had no typo. Its model score stayed 0.8907 and the equal-weight average was 0.7418, under 0.80. I wrote e1 and e2 as signal two with signal one moving too, and e3 as the label mapping.
+**Moment 4 — the evasion write-up**
+
+I asked why e1, e2, and e3 got through, with a stage and a mechanism for each. The draft blamed typos and word variety for all three. That did not fit e3, which had no typo. I counted the sentence lengths myself. e1 was 13, 20, 1, 14, 9. e3's model score was still 0.8907 and the average was 0.7418. I rewrote the diagnosis so e1 and e2 are signal two (with the model moving too), and e3 is the 0.80 label line.
+
+**Moment 5 — preloading the model**
+
+For the capstone I asked what one ops change would fix the slow first submit after `python app.py`. A draft wanted more logging only. I already had `latency_ms`. The warm-up I had thrown away was over ten seconds, and `/health` still said `detector_loaded: false`. I had it call `detector._load()` in `main()` before the server listens. First submit after start dropped from about 6 s to about 1.1 s. Boot to healthy got slower (about 5 s). That trade is the one I kept.
 
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 
@@ -1085,9 +1083,11 @@ One piece of work: instrument the existing run path and measure it. Not a new de
 
 ## What It Costs
 
-**Cost of one run:** **0.0484 seconds** of wall-clock compute, average of 10 warm `POST /submit` calls.
+**Cost of one run:** **0.0484 seconds** of wall-clock compute, average of 10 warm `POST /submit` calls. There is no API spend. Dollars for that run are $0.
 
-**How I measured it:** There is no API spend. The model runs locally. I started the service, sent one warm-up submit and threw that timing away (10.4111 s while `gpt2` loaded). Then I timed 10 submits of the same bus paragraph with `time.perf_counter` around the HTTP client call. The ten times were 0.0626, 0.0492, 0.0475, 0.0550, 0.0465, 0.0432, 0.0420, 0.0429, 0.0455, 0.0495 seconds. Mean 0.0484 s. Median 0.0470 s. Min 0.0420 s. Max 0.0626 s. Server-side `latency_ms` on those same rows sat between about 40 and 60 ms.
+**How I measured it:** The model runs locally. I started the service, sent one warm-up submit and threw that timing away (10.4111 s while `gpt2` loaded). Then I timed 10 submits of the same bus paragraph with `time.perf_counter` around the HTTP client call. The ten times were 0.0626, 0.0492, 0.0475, 0.0550, 0.0465, 0.0432, 0.0420, 0.0429, 0.0455, 0.0495 seconds. Mean 0.0484 s. Median 0.0470 s. Min 0.0420 s. Max 0.0626 s. Server-side `latency_ms` on those same rows sat between about 40 and 60 ms. Numbers are also in `results/cost_2026-11-03_warm10.md`.
+
+**A hundred people a day:** At one warm submit each, that is 100 × 0.0484 s = **4.84 seconds** of wall-clock compute and still $0 in API spend. If each of those hundred people hit the day cap of 60 submits, that is 100 × 60 × 0.0484 s = **290.4 seconds** (~4.8 minutes) of warm scoring compute, still $0.
 
 ---
 
@@ -1273,40 +1273,69 @@ Full after dump: `results/capstone_criteria_2026-11-03_1630_after.json`.
 
 **Did it help:** Yes for the first real score after start: 5.9905 s → 1.1497 s, and health now reports `detector_loaded: true` before traffic. The trade is a slower Path B boot: C5 went from ~0.2–0.4 s to ~4.3–5.1 s, still under the 15 s target. Warm medians (C3) did not move in a meaningful way.
 
+---
 
+## Capstone What's Still Broken
 
+No capstone criterion missed. All five stayed MET before the preload change and after it.
 
+What I cut on purpose and left cut: a free host (Path A), a third signal, and any change to the 0.7 / 0.3 weights or the 0.35 / 0.80 lines. Shape A was the ops layer only. Those cuts stay in What's Still Broken because they are scope, not unfinished code.
 
+What is still rough after the one fix: the first `/submit` after a preloaded start is about 1.15 s, while a warm submit is about 0.05 s. Preload moved the multi-second load into boot, but it did not make the first scored request match a warm one. C3's 3.0 s warm line is also still loose enough that a real regression would have to be almost a hang before it failed. I stopped after the one preload change because that was the measured improvement for this unit, and both result sets already show the boot-for-first-score trade.
+
+**What I'd do next if this were real and I had another unit:**
+
+I would chase the leftover gap between the first post-preload submit (~1.15 s) and a warm submit (~0.05 s), with `latency_ms` already on every row as the measure. That is the next place a writer would notice the service after a restart, and it is the only remaining latency cliff the before/after table still shows.
+
+### Repository to submit
+
+Same fork as units 7 and 8 (the system this capstone extended): https://github.com/vs-turner/ai201-provenance
 
 <!-- ═════════════════════════════════════════════════════════════════════
 
      SUBMISSION CHECKLIST — unit 7
 
-       [ ] criteria.md has five numbered criteria, each naming a target
-       [ ] Each has a reason underneath
-       [ ] POST /submit returns content_id, guess, confidence, label,
+       [x] criteria.md has five numbered criteria, each naming a target
+       [x] Each has a reason underneath
+       [x] POST /submit returns content_id, guess, confidence, label,
            model_score and style_score
-       [ ] Two signals that measure DIFFERENT things, each with a named blind spot
-       [ ] Three label variants, all reachable, written out in full
-       [ ] POST /appeal changes status and writes to the log
-       [ ] Signals and Scoring names scoring.py::combine_signals
-       [ ] Sample Run: a submission AND an appeal, as pasted text
-       [ ] At least four new commits
-       [ ] Repository URL submitted — WRITE IT DOWN
+       [x] Two signals that measure DIFFERENT things, each with a named blind spot
+       [x] Three label variants, all reachable, written out in full
+       [x] POST /appeal changes status and writes to the log
+       [x] Signals and Scoring names scoring.py::combine_signals
+       [x] Sample Run: a submission AND an appeal, as pasted text
+       [x] At least four new commits
+       [x] Repository URL submitted — WRITE IT DOWN
+           https://github.com/vs-turner/ai201-provenance
 
      SUBMISSION CHECKLIST — unit 8
 
-       [ ] Rate limiting on /submit, with your numbers justified
-       [ ] The pasted run of status codes showing 429
-       [ ] Audit log with all nine fields, recording rejections too
-       [ ] The attack set run IN FULL, every input with an outcome
-       [ ] Ten audit log entries pasted as text
-       [ ] Five criteria across three trials
-       [ ] A diagnosis for every miss and every broken attack — stage AND mechanism
-       [ ] One improvement, with Attack Run — After
-       [ ] What's Still Broken, including the production trade
-       [ ] At least four new commits
-       [ ] The SAME repository URL as last unit
+       [x] Rate limiting on /submit, with your numbers justified
+       [x] The pasted run of status codes showing 429
+       [x] Audit log with all nine fields, recording rejections too
+       [x] The attack set run IN FULL, every input with an outcome
+       [x] Ten audit log entries pasted as text
+       [x] Five criteria across three trials
+       [x] A diagnosis for every miss and every broken attack — stage AND mechanism
+       [x] One improvement, with Attack Run — After
+       [x] What's Still Broken, including the production trade
+       [x] At least four new commits
+       [x] The SAME repository URL as last unit
+           https://github.com/vs-turner/ai201-provenance
+
+     SUBMISSION CHECKLIST — capstone
+
+       [x] The Shape names the system, the shape, and what is out of scope
+       [x] Path B in RUNNING.md, with a clean-checkout start
+       [x] Instrumentation: ten pasted log rows with latency_ms / text_chars
+       [x] What It Costs: measured number, method, and 100-people arithmetic
+       [x] Five extension criteria, three trials, pasted real output
+       [x] Capstone Diagnoses with a verdict on every criterion
+       [x] One improvement, with before and after result sets
+       [x] Capstone What's Still Broken, plus the next-unit sentence
+       [x] How I Used AI updated for this work
+       [x] The SAME repository URL as the system extended
+           https://github.com/vs-turner/ai201-provenance
 
      Do not delete and recreate this repository.
      ═════════════════════════════════════════════════════════════════════ -->
