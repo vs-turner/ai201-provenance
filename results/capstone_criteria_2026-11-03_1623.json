@@ -1,0 +1,2514 @@
+{
+  "produced_by": "inline capstone eval (client timings + logs/audit.jsonl)",
+  "stamp": "2026-11-03_1623",
+  "c1": [
+    {
+      "trial": 1,
+      "latency_ok": 10,
+      "n": 10,
+      "pass": true,
+      "rows": [
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8",
+          "creator_id": "cap_t1_n1",
+          "guess": "human",
+          "model_score": 0.1823,
+          "style_score": 0.1991,
+          "combined_score": 0.1873,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 283,
+          "latency_ms": 74.442
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "3ca44af2-68e9-4743-98f6-ec3eaf46de05",
+          "creator_id": "cap_t1_n2",
+          "guess": "human",
+          "model_score": 0.3007,
+          "style_score": 0.3553,
+          "combined_score": 0.3171,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 239,
+          "latency_ms": 57.942
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "69f19235-6acd-4d4a-8cb5-45d9fc7cfa8f",
+          "creator_id": "cap_t1_n3",
+          "guess": "human",
+          "model_score": 0.2046,
+          "style_score": 0.2563,
+          "combined_score": 0.2201,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 243,
+          "latency_ms": 64.731
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "c57859ee-2881-4b85-8161-056d9375f2d0",
+          "creator_id": "cap_t1_n4",
+          "guess": "human",
+          "model_score": 0.2541,
+          "style_score": 0.2898,
+          "combined_score": 0.2648,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 54.892
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "1c804183-0c13-45da-8683-332f81cfa884",
+          "creator_id": "cap_t1_n5",
+          "guess": "human",
+          "model_score": 0.3299,
+          "style_score": 0.22,
+          "combined_score": 0.2969,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 233,
+          "latency_ms": 54.849
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "29643960-0984-42af-862e-268b57bb8f82",
+          "creator_id": "cap_t1_n6",
+          "guess": "human",
+          "model_score": 0.3638,
+          "style_score": 0.22,
+          "combined_score": 0.3207,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 248,
+          "latency_ms": 56.179
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "498f1a0e-08bc-478d-a857-247399d7d29c",
+          "creator_id": "cap_t1_n7",
+          "guess": "unsure",
+          "model_score": 0.4286,
+          "style_score": 0.2857,
+          "combined_score": 0.3857,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 234,
+          "latency_ms": 54.404
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "359ea537-2b72-41ae-ac1d-7428fb261733",
+          "creator_id": "cap_t1_n8",
+          "guess": "human",
+          "model_score": 0.2988,
+          "style_score": 0.3369,
+          "combined_score": 0.3102,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 252,
+          "latency_ms": 55.374
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "b53f9ebe-cefb-4e1f-82c2-ae4fdd01171b",
+          "creator_id": "cap_t1_n9",
+          "guess": "unsure",
+          "model_score": 0.3747,
+          "style_score": 0.3802,
+          "combined_score": 0.3763,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 246,
+          "latency_ms": 60.705
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "10834218-1f4e-4cfc-8a02-55d63f0b7838",
+          "creator_id": "cap_t1_n10",
+          "guess": "human",
+          "model_score": 0.4541,
+          "style_score": 0.1031,
+          "combined_score": 0.3488,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 56.947
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "elapsed_s": 0.0766,
+          "payload": {
+            "combined_score": 0.1873,
+            "confidence": 0.1873,
+            "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.1823,
+            "style_score": 0.1991
+          },
+          "creator_id": "cap_t1_n1"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0594,
+          "payload": {
+            "combined_score": 0.3171,
+            "confidence": 0.3171,
+            "content_id": "3ca44af2-68e9-4743-98f6-ec3eaf46de05",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3007,
+            "style_score": 0.3553
+          },
+          "creator_id": "cap_t1_n2"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0667,
+          "payload": {
+            "combined_score": 0.2201,
+            "confidence": 0.2201,
+            "content_id": "69f19235-6acd-4d4a-8cb5-45d9fc7cfa8f",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2046,
+            "style_score": 0.2563
+          },
+          "creator_id": "cap_t1_n3"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0563,
+          "payload": {
+            "combined_score": 0.2648,
+            "confidence": 0.2648,
+            "content_id": "c57859ee-2881-4b85-8161-056d9375f2d0",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2541,
+            "style_score": 0.2898
+          },
+          "creator_id": "cap_t1_n4"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0562,
+          "payload": {
+            "combined_score": 0.2969,
+            "confidence": 0.2969,
+            "content_id": "1c804183-0c13-45da-8683-332f81cfa884",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3299,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t1_n5"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0575,
+          "payload": {
+            "combined_score": 0.3207,
+            "confidence": 0.3207,
+            "content_id": "29643960-0984-42af-862e-268b57bb8f82",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3638,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t1_n6"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0558,
+          "payload": {
+            "combined_score": 0.3857,
+            "confidence": 0.3857,
+            "content_id": "498f1a0e-08bc-478d-a857-247399d7d29c",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.4286,
+            "style_score": 0.2857
+          },
+          "creator_id": "cap_t1_n7"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0568,
+          "payload": {
+            "combined_score": 0.3102,
+            "confidence": 0.3102,
+            "content_id": "359ea537-2b72-41ae-ac1d-7428fb261733",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2988,
+            "style_score": 0.3369
+          },
+          "creator_id": "cap_t1_n8"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0621,
+          "payload": {
+            "combined_score": 0.3763,
+            "confidence": 0.3763,
+            "content_id": "b53f9ebe-cefb-4e1f-82c2-ae4fdd01171b",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.3747,
+            "style_score": 0.3802
+          },
+          "creator_id": "cap_t1_n9"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0582,
+          "payload": {
+            "combined_score": 0.3488,
+            "confidence": 0.3488,
+            "content_id": "10834218-1f4e-4cfc-8a02-55d63f0b7838",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.4541,
+            "style_score": 0.1031
+          },
+          "creator_id": "cap_t1_n10"
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "latency_ok": 10,
+      "n": 10,
+      "pass": true,
+      "rows": [
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "b1b59a17-2b2f-43ef-b8fe-4a86d414bec9",
+          "creator_id": "cap_t2_n1",
+          "guess": "human",
+          "model_score": 0.1823,
+          "style_score": 0.1991,
+          "combined_score": 0.1873,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 283,
+          "latency_ms": 59.299
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "34e804e7-d3af-4acf-9ef3-39fd7723b82f",
+          "creator_id": "cap_t2_n2",
+          "guess": "human",
+          "model_score": 0.3007,
+          "style_score": 0.3553,
+          "combined_score": 0.3171,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 239,
+          "latency_ms": 59.743
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "11ff7be3-2a9c-4c49-a4b8-8931668a88f3",
+          "creator_id": "cap_t2_n3",
+          "guess": "human",
+          "model_score": 0.2046,
+          "style_score": 0.2563,
+          "combined_score": 0.2201,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 243,
+          "latency_ms": 55.867
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "ce82f505-69c8-465e-b22a-bc7b4e72c4ef",
+          "creator_id": "cap_t2_n4",
+          "guess": "human",
+          "model_score": 0.2541,
+          "style_score": 0.2898,
+          "combined_score": 0.2648,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 55.041
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "6f6bcf75-809b-4ef0-9cf0-2d929368f6d5",
+          "creator_id": "cap_t2_n5",
+          "guess": "human",
+          "model_score": 0.3299,
+          "style_score": 0.22,
+          "combined_score": 0.2969,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 233,
+          "latency_ms": 54.442
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "005898d9-0033-479a-bb83-177f33f0853d",
+          "creator_id": "cap_t2_n6",
+          "guess": "human",
+          "model_score": 0.3638,
+          "style_score": 0.22,
+          "combined_score": 0.3207,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 248,
+          "latency_ms": 55.609
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "a8a5c710-9ff8-4485-afd3-413e477fa568",
+          "creator_id": "cap_t2_n7",
+          "guess": "unsure",
+          "model_score": 0.4286,
+          "style_score": 0.2857,
+          "combined_score": 0.3857,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 234,
+          "latency_ms": 54.388
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "e2008f7b-f9b4-40be-929d-81b2ea3bd723",
+          "creator_id": "cap_t2_n8",
+          "guess": "human",
+          "model_score": 0.2988,
+          "style_score": 0.3369,
+          "combined_score": 0.3102,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 252,
+          "latency_ms": 54.997
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "da01244d-ae68-4306-986e-3d9dbd011229",
+          "creator_id": "cap_t2_n9",
+          "guess": "unsure",
+          "model_score": 0.3747,
+          "style_score": 0.3802,
+          "combined_score": 0.3763,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 246,
+          "latency_ms": 55.468
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "4a1f7be1-961d-4bb9-a1e0-b12d60a15196",
+          "creator_id": "cap_t2_n10",
+          "guess": "human",
+          "model_score": 0.4541,
+          "style_score": 0.1031,
+          "combined_score": 0.3488,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 59.236
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "elapsed_s": 0.0604,
+          "payload": {
+            "combined_score": 0.1873,
+            "confidence": 0.1873,
+            "content_id": "b1b59a17-2b2f-43ef-b8fe-4a86d414bec9",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.1823,
+            "style_score": 0.1991
+          },
+          "creator_id": "cap_t2_n1"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0611,
+          "payload": {
+            "combined_score": 0.3171,
+            "confidence": 0.3171,
+            "content_id": "34e804e7-d3af-4acf-9ef3-39fd7723b82f",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3007,
+            "style_score": 0.3553
+          },
+          "creator_id": "cap_t2_n2"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0572,
+          "payload": {
+            "combined_score": 0.2201,
+            "confidence": 0.2201,
+            "content_id": "11ff7be3-2a9c-4c49-a4b8-8931668a88f3",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2046,
+            "style_score": 0.2563
+          },
+          "creator_id": "cap_t2_n3"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0563,
+          "payload": {
+            "combined_score": 0.2648,
+            "confidence": 0.2648,
+            "content_id": "ce82f505-69c8-465e-b22a-bc7b4e72c4ef",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2541,
+            "style_score": 0.2898
+          },
+          "creator_id": "cap_t2_n4"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0557,
+          "payload": {
+            "combined_score": 0.2969,
+            "confidence": 0.2969,
+            "content_id": "6f6bcf75-809b-4ef0-9cf0-2d929368f6d5",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3299,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t2_n5"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0569,
+          "payload": {
+            "combined_score": 0.3207,
+            "confidence": 0.3207,
+            "content_id": "005898d9-0033-479a-bb83-177f33f0853d",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3638,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t2_n6"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0557,
+          "payload": {
+            "combined_score": 0.3857,
+            "confidence": 0.3857,
+            "content_id": "a8a5c710-9ff8-4485-afd3-413e477fa568",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.4286,
+            "style_score": 0.2857
+          },
+          "creator_id": "cap_t2_n7"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0562,
+          "payload": {
+            "combined_score": 0.3102,
+            "confidence": 0.3102,
+            "content_id": "e2008f7b-f9b4-40be-929d-81b2ea3bd723",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2988,
+            "style_score": 0.3369
+          },
+          "creator_id": "cap_t2_n8"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0567,
+          "payload": {
+            "combined_score": 0.3763,
+            "confidence": 0.3763,
+            "content_id": "da01244d-ae68-4306-986e-3d9dbd011229",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.3747,
+            "style_score": 0.3802
+          },
+          "creator_id": "cap_t2_n9"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0606,
+          "payload": {
+            "combined_score": 0.3488,
+            "confidence": 0.3488,
+            "content_id": "4a1f7be1-961d-4bb9-a1e0-b12d60a15196",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.4541,
+            "style_score": 0.1031
+          },
+          "creator_id": "cap_t2_n10"
+        }
+      ]
+    },
+    {
+      "trial": 3,
+      "latency_ok": 10,
+      "n": 10,
+      "pass": true,
+      "rows": [
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "2b2f54bb-c0d9-471f-be90-f9a6dda7c1df",
+          "creator_id": "cap_t3_n1",
+          "guess": "human",
+          "model_score": 0.1823,
+          "style_score": 0.1991,
+          "combined_score": 0.1873,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 283,
+          "latency_ms": 57.991
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "a71c263d-db2e-433b-9720-3c4831a27bf0",
+          "creator_id": "cap_t3_n2",
+          "guess": "human",
+          "model_score": 0.3007,
+          "style_score": 0.3553,
+          "combined_score": 0.3171,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 239,
+          "latency_ms": 56.665
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "17bd9d4a-8fbb-4b61-be31-547488b83e4f",
+          "creator_id": "cap_t3_n3",
+          "guess": "human",
+          "model_score": 0.2046,
+          "style_score": 0.2563,
+          "combined_score": 0.2201,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 243,
+          "latency_ms": 57.12
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "8bcb5b08-b7c2-4b1a-8331-189bc515dd26",
+          "creator_id": "cap_t3_n4",
+          "guess": "human",
+          "model_score": 0.2541,
+          "style_score": 0.2898,
+          "combined_score": 0.2648,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 56.272
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "74aa70f8-64fd-498e-aaf0-a6b79fda6581",
+          "creator_id": "cap_t3_n5",
+          "guess": "human",
+          "model_score": 0.3299,
+          "style_score": 0.22,
+          "combined_score": 0.2969,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 233,
+          "latency_ms": 54.824
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "da948ac9-c60d-45b5-a41a-03898193fa8e",
+          "creator_id": "cap_t3_n6",
+          "guess": "human",
+          "model_score": 0.3638,
+          "style_score": 0.22,
+          "combined_score": 0.3207,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 248,
+          "latency_ms": 54.461
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "fe6ec4f7-48d9-4fb2-a94f-75523a51d577",
+          "creator_id": "cap_t3_n7",
+          "guess": "unsure",
+          "model_score": 0.4286,
+          "style_score": 0.2857,
+          "combined_score": 0.3857,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 234,
+          "latency_ms": 55.092
+        },
+        {
+          "timestamp": "2026-11-04T00:23:00+00:00",
+          "content_id": "ad74e01a-a6c7-4b1e-88b1-c88666b39486",
+          "creator_id": "cap_t3_n8",
+          "guess": "human",
+          "model_score": 0.2988,
+          "style_score": 0.3369,
+          "combined_score": 0.3102,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 252,
+          "latency_ms": 57.133
+        },
+        {
+          "timestamp": "2026-11-04T00:23:00+00:00",
+          "content_id": "0e2ec4ff-0d2b-4fe9-8105-1014b30a5b00",
+          "creator_id": "cap_t3_n9",
+          "guess": "unsure",
+          "model_score": 0.3747,
+          "style_score": 0.3802,
+          "combined_score": 0.3763,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 246,
+          "latency_ms": 62.35
+        },
+        {
+          "timestamp": "2026-11-04T00:23:00+00:00",
+          "content_id": "6b56caf2-53e2-4674-8862-c96fb68abf9e",
+          "creator_id": "cap_t3_n10",
+          "guess": "human",
+          "model_score": 0.4541,
+          "style_score": 0.1031,
+          "combined_score": 0.3488,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 59.501
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "elapsed_s": 0.059,
+          "payload": {
+            "combined_score": 0.1873,
+            "confidence": 0.1873,
+            "content_id": "2b2f54bb-c0d9-471f-be90-f9a6dda7c1df",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.1823,
+            "style_score": 0.1991
+          },
+          "creator_id": "cap_t3_n1"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0579,
+          "payload": {
+            "combined_score": 0.3171,
+            "confidence": 0.3171,
+            "content_id": "a71c263d-db2e-433b-9720-3c4831a27bf0",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3007,
+            "style_score": 0.3553
+          },
+          "creator_id": "cap_t3_n2"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0585,
+          "payload": {
+            "combined_score": 0.2201,
+            "confidence": 0.2201,
+            "content_id": "17bd9d4a-8fbb-4b61-be31-547488b83e4f",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2046,
+            "style_score": 0.2563
+          },
+          "creator_id": "cap_t3_n3"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0576,
+          "payload": {
+            "combined_score": 0.2648,
+            "confidence": 0.2648,
+            "content_id": "8bcb5b08-b7c2-4b1a-8331-189bc515dd26",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2541,
+            "style_score": 0.2898
+          },
+          "creator_id": "cap_t3_n4"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.056,
+          "payload": {
+            "combined_score": 0.2969,
+            "confidence": 0.2969,
+            "content_id": "74aa70f8-64fd-498e-aaf0-a6b79fda6581",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3299,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t3_n5"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0557,
+          "payload": {
+            "combined_score": 0.3207,
+            "confidence": 0.3207,
+            "content_id": "da948ac9-c60d-45b5-a41a-03898193fa8e",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3638,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t3_n6"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0563,
+          "payload": {
+            "combined_score": 0.3857,
+            "confidence": 0.3857,
+            "content_id": "fe6ec4f7-48d9-4fb2-a94f-75523a51d577",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.4286,
+            "style_score": 0.2857
+          },
+          "creator_id": "cap_t3_n7"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0584,
+          "payload": {
+            "combined_score": 0.3102,
+            "confidence": 0.3102,
+            "content_id": "ad74e01a-a6c7-4b1e-88b1-c88666b39486",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2988,
+            "style_score": 0.3369
+          },
+          "creator_id": "cap_t3_n8"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0637,
+          "payload": {
+            "combined_score": 0.3763,
+            "confidence": 0.3763,
+            "content_id": "0e2ec4ff-0d2b-4fe9-8105-1014b30a5b00",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.3747,
+            "style_score": 0.3802
+          },
+          "creator_id": "cap_t3_n9"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0609,
+          "payload": {
+            "combined_score": 0.3488,
+            "confidence": 0.3488,
+            "content_id": "6b56caf2-53e2-4674-8862-c96fb68abf9e",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.4541,
+            "style_score": 0.1031
+          },
+          "creator_id": "cap_t3_n10"
+        }
+      ]
+    }
+  ],
+  "c2": [
+    {
+      "trial": 1,
+      "fields_ok": 10,
+      "n": 10,
+      "pass": true,
+      "rows": [
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8",
+          "creator_id": "cap_t1_n1",
+          "guess": "human",
+          "model_score": 0.1823,
+          "style_score": 0.1991,
+          "combined_score": 0.1873,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 283,
+          "latency_ms": 74.442
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "3ca44af2-68e9-4743-98f6-ec3eaf46de05",
+          "creator_id": "cap_t1_n2",
+          "guess": "human",
+          "model_score": 0.3007,
+          "style_score": 0.3553,
+          "combined_score": 0.3171,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 239,
+          "latency_ms": 57.942
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "69f19235-6acd-4d4a-8cb5-45d9fc7cfa8f",
+          "creator_id": "cap_t1_n3",
+          "guess": "human",
+          "model_score": 0.2046,
+          "style_score": 0.2563,
+          "combined_score": 0.2201,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 243,
+          "latency_ms": 64.731
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "c57859ee-2881-4b85-8161-056d9375f2d0",
+          "creator_id": "cap_t1_n4",
+          "guess": "human",
+          "model_score": 0.2541,
+          "style_score": 0.2898,
+          "combined_score": 0.2648,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 54.892
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "1c804183-0c13-45da-8683-332f81cfa884",
+          "creator_id": "cap_t1_n5",
+          "guess": "human",
+          "model_score": 0.3299,
+          "style_score": 0.22,
+          "combined_score": 0.2969,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 233,
+          "latency_ms": 54.849
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "29643960-0984-42af-862e-268b57bb8f82",
+          "creator_id": "cap_t1_n6",
+          "guess": "human",
+          "model_score": 0.3638,
+          "style_score": 0.22,
+          "combined_score": 0.3207,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 248,
+          "latency_ms": 56.179
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "498f1a0e-08bc-478d-a857-247399d7d29c",
+          "creator_id": "cap_t1_n7",
+          "guess": "unsure",
+          "model_score": 0.4286,
+          "style_score": 0.2857,
+          "combined_score": 0.3857,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 234,
+          "latency_ms": 54.404
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "359ea537-2b72-41ae-ac1d-7428fb261733",
+          "creator_id": "cap_t1_n8",
+          "guess": "human",
+          "model_score": 0.2988,
+          "style_score": 0.3369,
+          "combined_score": 0.3102,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 252,
+          "latency_ms": 55.374
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "b53f9ebe-cefb-4e1f-82c2-ae4fdd01171b",
+          "creator_id": "cap_t1_n9",
+          "guess": "unsure",
+          "model_score": 0.3747,
+          "style_score": 0.3802,
+          "combined_score": 0.3763,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 246,
+          "latency_ms": 60.705
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "content_id": "10834218-1f4e-4cfc-8a02-55d63f0b7838",
+          "creator_id": "cap_t1_n10",
+          "guess": "human",
+          "model_score": 0.4541,
+          "style_score": 0.1031,
+          "combined_score": 0.3488,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 56.947
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "fields_ok": 10,
+      "n": 10,
+      "pass": true,
+      "rows": [
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "b1b59a17-2b2f-43ef-b8fe-4a86d414bec9",
+          "creator_id": "cap_t2_n1",
+          "guess": "human",
+          "model_score": 0.1823,
+          "style_score": 0.1991,
+          "combined_score": 0.1873,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 283,
+          "latency_ms": 59.299
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "34e804e7-d3af-4acf-9ef3-39fd7723b82f",
+          "creator_id": "cap_t2_n2",
+          "guess": "human",
+          "model_score": 0.3007,
+          "style_score": 0.3553,
+          "combined_score": 0.3171,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 239,
+          "latency_ms": 59.743
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "11ff7be3-2a9c-4c49-a4b8-8931668a88f3",
+          "creator_id": "cap_t2_n3",
+          "guess": "human",
+          "model_score": 0.2046,
+          "style_score": 0.2563,
+          "combined_score": 0.2201,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 243,
+          "latency_ms": 55.867
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "ce82f505-69c8-465e-b22a-bc7b4e72c4ef",
+          "creator_id": "cap_t2_n4",
+          "guess": "human",
+          "model_score": 0.2541,
+          "style_score": 0.2898,
+          "combined_score": 0.2648,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 55.041
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "6f6bcf75-809b-4ef0-9cf0-2d929368f6d5",
+          "creator_id": "cap_t2_n5",
+          "guess": "human",
+          "model_score": 0.3299,
+          "style_score": 0.22,
+          "combined_score": 0.2969,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 233,
+          "latency_ms": 54.442
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "005898d9-0033-479a-bb83-177f33f0853d",
+          "creator_id": "cap_t2_n6",
+          "guess": "human",
+          "model_score": 0.3638,
+          "style_score": 0.22,
+          "combined_score": 0.3207,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 248,
+          "latency_ms": 55.609
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "a8a5c710-9ff8-4485-afd3-413e477fa568",
+          "creator_id": "cap_t2_n7",
+          "guess": "unsure",
+          "model_score": 0.4286,
+          "style_score": 0.2857,
+          "combined_score": 0.3857,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 234,
+          "latency_ms": 54.388
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "e2008f7b-f9b4-40be-929d-81b2ea3bd723",
+          "creator_id": "cap_t2_n8",
+          "guess": "human",
+          "model_score": 0.2988,
+          "style_score": 0.3369,
+          "combined_score": 0.3102,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 252,
+          "latency_ms": 54.997
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "da01244d-ae68-4306-986e-3d9dbd011229",
+          "creator_id": "cap_t2_n9",
+          "guess": "unsure",
+          "model_score": 0.3747,
+          "style_score": 0.3802,
+          "combined_score": 0.3763,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 246,
+          "latency_ms": 55.468
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "4a1f7be1-961d-4bb9-a1e0-b12d60a15196",
+          "creator_id": "cap_t2_n10",
+          "guess": "human",
+          "model_score": 0.4541,
+          "style_score": 0.1031,
+          "combined_score": 0.3488,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 59.236
+        }
+      ]
+    },
+    {
+      "trial": 3,
+      "fields_ok": 10,
+      "n": 10,
+      "pass": true,
+      "rows": [
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "2b2f54bb-c0d9-471f-be90-f9a6dda7c1df",
+          "creator_id": "cap_t3_n1",
+          "guess": "human",
+          "model_score": 0.1823,
+          "style_score": 0.1991,
+          "combined_score": 0.1873,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 283,
+          "latency_ms": 57.991
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "a71c263d-db2e-433b-9720-3c4831a27bf0",
+          "creator_id": "cap_t3_n2",
+          "guess": "human",
+          "model_score": 0.3007,
+          "style_score": 0.3553,
+          "combined_score": 0.3171,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 239,
+          "latency_ms": 56.665
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "17bd9d4a-8fbb-4b61-be31-547488b83e4f",
+          "creator_id": "cap_t3_n3",
+          "guess": "human",
+          "model_score": 0.2046,
+          "style_score": 0.2563,
+          "combined_score": 0.2201,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 243,
+          "latency_ms": 57.12
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "8bcb5b08-b7c2-4b1a-8331-189bc515dd26",
+          "creator_id": "cap_t3_n4",
+          "guess": "human",
+          "model_score": 0.2541,
+          "style_score": 0.2898,
+          "combined_score": 0.2648,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 56.272
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "74aa70f8-64fd-498e-aaf0-a6b79fda6581",
+          "creator_id": "cap_t3_n5",
+          "guess": "human",
+          "model_score": 0.3299,
+          "style_score": 0.22,
+          "combined_score": 0.2969,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 233,
+          "latency_ms": 54.824
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "da948ac9-c60d-45b5-a41a-03898193fa8e",
+          "creator_id": "cap_t3_n6",
+          "guess": "human",
+          "model_score": 0.3638,
+          "style_score": 0.22,
+          "combined_score": 0.3207,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 248,
+          "latency_ms": 54.461
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "content_id": "fe6ec4f7-48d9-4fb2-a94f-75523a51d577",
+          "creator_id": "cap_t3_n7",
+          "guess": "unsure",
+          "model_score": 0.4286,
+          "style_score": 0.2857,
+          "combined_score": 0.3857,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 234,
+          "latency_ms": 55.092
+        },
+        {
+          "timestamp": "2026-11-04T00:23:00+00:00",
+          "content_id": "ad74e01a-a6c7-4b1e-88b1-c88666b39486",
+          "creator_id": "cap_t3_n8",
+          "guess": "human",
+          "model_score": 0.2988,
+          "style_score": 0.3369,
+          "combined_score": 0.3102,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 252,
+          "latency_ms": 57.133
+        },
+        {
+          "timestamp": "2026-11-04T00:23:00+00:00",
+          "content_id": "0e2ec4ff-0d2b-4fe9-8105-1014b30a5b00",
+          "creator_id": "cap_t3_n9",
+          "guess": "unsure",
+          "model_score": 0.3747,
+          "style_score": 0.3802,
+          "combined_score": 0.3763,
+          "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+          "status": "decided",
+          "text_chars": 246,
+          "latency_ms": 62.35
+        },
+        {
+          "timestamp": "2026-11-04T00:23:00+00:00",
+          "content_id": "6b56caf2-53e2-4674-8862-c96fb68abf9e",
+          "creator_id": "cap_t3_n10",
+          "guess": "human",
+          "model_score": 0.4541,
+          "style_score": 0.1031,
+          "combined_score": 0.3488,
+          "label": "We think a person wrote this.",
+          "status": "decided",
+          "text_chars": 242,
+          "latency_ms": 59.501
+        }
+      ]
+    }
+  ],
+  "c3": [
+    {
+      "trial": 1,
+      "median_s": 0.0578,
+      "timings_s": [
+        0.0766,
+        0.0594,
+        0.0667,
+        0.0563,
+        0.0562,
+        0.0575,
+        0.0558,
+        0.0568,
+        0.0621,
+        0.0582
+      ],
+      "pass": true,
+      "responses": [
+        {
+          "status": 200,
+          "elapsed_s": 0.0766,
+          "payload": {
+            "combined_score": 0.1873,
+            "confidence": 0.1873,
+            "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.1823,
+            "style_score": 0.1991
+          },
+          "creator_id": "cap_t1_n1"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0594,
+          "payload": {
+            "combined_score": 0.3171,
+            "confidence": 0.3171,
+            "content_id": "3ca44af2-68e9-4743-98f6-ec3eaf46de05",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3007,
+            "style_score": 0.3553
+          },
+          "creator_id": "cap_t1_n2"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0667,
+          "payload": {
+            "combined_score": 0.2201,
+            "confidence": 0.2201,
+            "content_id": "69f19235-6acd-4d4a-8cb5-45d9fc7cfa8f",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2046,
+            "style_score": 0.2563
+          },
+          "creator_id": "cap_t1_n3"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0563,
+          "payload": {
+            "combined_score": 0.2648,
+            "confidence": 0.2648,
+            "content_id": "c57859ee-2881-4b85-8161-056d9375f2d0",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2541,
+            "style_score": 0.2898
+          },
+          "creator_id": "cap_t1_n4"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0562,
+          "payload": {
+            "combined_score": 0.2969,
+            "confidence": 0.2969,
+            "content_id": "1c804183-0c13-45da-8683-332f81cfa884",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3299,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t1_n5"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0575,
+          "payload": {
+            "combined_score": 0.3207,
+            "confidence": 0.3207,
+            "content_id": "29643960-0984-42af-862e-268b57bb8f82",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3638,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t1_n6"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0558,
+          "payload": {
+            "combined_score": 0.3857,
+            "confidence": 0.3857,
+            "content_id": "498f1a0e-08bc-478d-a857-247399d7d29c",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.4286,
+            "style_score": 0.2857
+          },
+          "creator_id": "cap_t1_n7"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0568,
+          "payload": {
+            "combined_score": 0.3102,
+            "confidence": 0.3102,
+            "content_id": "359ea537-2b72-41ae-ac1d-7428fb261733",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2988,
+            "style_score": 0.3369
+          },
+          "creator_id": "cap_t1_n8"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0621,
+          "payload": {
+            "combined_score": 0.3763,
+            "confidence": 0.3763,
+            "content_id": "b53f9ebe-cefb-4e1f-82c2-ae4fdd01171b",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.3747,
+            "style_score": 0.3802
+          },
+          "creator_id": "cap_t1_n9"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0582,
+          "payload": {
+            "combined_score": 0.3488,
+            "confidence": 0.3488,
+            "content_id": "10834218-1f4e-4cfc-8a02-55d63f0b7838",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.4541,
+            "style_score": 0.1031
+          },
+          "creator_id": "cap_t1_n10"
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "median_s": 0.0568,
+      "timings_s": [
+        0.0604,
+        0.0611,
+        0.0572,
+        0.0563,
+        0.0557,
+        0.0569,
+        0.0557,
+        0.0562,
+        0.0567,
+        0.0606
+      ],
+      "pass": true,
+      "responses": [
+        {
+          "status": 200,
+          "elapsed_s": 0.0604,
+          "payload": {
+            "combined_score": 0.1873,
+            "confidence": 0.1873,
+            "content_id": "b1b59a17-2b2f-43ef-b8fe-4a86d414bec9",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.1823,
+            "style_score": 0.1991
+          },
+          "creator_id": "cap_t2_n1"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0611,
+          "payload": {
+            "combined_score": 0.3171,
+            "confidence": 0.3171,
+            "content_id": "34e804e7-d3af-4acf-9ef3-39fd7723b82f",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3007,
+            "style_score": 0.3553
+          },
+          "creator_id": "cap_t2_n2"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0572,
+          "payload": {
+            "combined_score": 0.2201,
+            "confidence": 0.2201,
+            "content_id": "11ff7be3-2a9c-4c49-a4b8-8931668a88f3",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2046,
+            "style_score": 0.2563
+          },
+          "creator_id": "cap_t2_n3"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0563,
+          "payload": {
+            "combined_score": 0.2648,
+            "confidence": 0.2648,
+            "content_id": "ce82f505-69c8-465e-b22a-bc7b4e72c4ef",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2541,
+            "style_score": 0.2898
+          },
+          "creator_id": "cap_t2_n4"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0557,
+          "payload": {
+            "combined_score": 0.2969,
+            "confidence": 0.2969,
+            "content_id": "6f6bcf75-809b-4ef0-9cf0-2d929368f6d5",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3299,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t2_n5"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0569,
+          "payload": {
+            "combined_score": 0.3207,
+            "confidence": 0.3207,
+            "content_id": "005898d9-0033-479a-bb83-177f33f0853d",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3638,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t2_n6"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0557,
+          "payload": {
+            "combined_score": 0.3857,
+            "confidence": 0.3857,
+            "content_id": "a8a5c710-9ff8-4485-afd3-413e477fa568",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.4286,
+            "style_score": 0.2857
+          },
+          "creator_id": "cap_t2_n7"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0562,
+          "payload": {
+            "combined_score": 0.3102,
+            "confidence": 0.3102,
+            "content_id": "e2008f7b-f9b4-40be-929d-81b2ea3bd723",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2988,
+            "style_score": 0.3369
+          },
+          "creator_id": "cap_t2_n8"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0567,
+          "payload": {
+            "combined_score": 0.3763,
+            "confidence": 0.3763,
+            "content_id": "da01244d-ae68-4306-986e-3d9dbd011229",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.3747,
+            "style_score": 0.3802
+          },
+          "creator_id": "cap_t2_n9"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0606,
+          "payload": {
+            "combined_score": 0.3488,
+            "confidence": 0.3488,
+            "content_id": "4a1f7be1-961d-4bb9-a1e0-b12d60a15196",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.4541,
+            "style_score": 0.1031
+          },
+          "creator_id": "cap_t2_n10"
+        }
+      ]
+    },
+    {
+      "trial": 3,
+      "median_s": 0.0582,
+      "timings_s": [
+        0.059,
+        0.0579,
+        0.0585,
+        0.0576,
+        0.056,
+        0.0557,
+        0.0563,
+        0.0584,
+        0.0637,
+        0.0609
+      ],
+      "pass": true,
+      "responses": [
+        {
+          "status": 200,
+          "elapsed_s": 0.059,
+          "payload": {
+            "combined_score": 0.1873,
+            "confidence": 0.1873,
+            "content_id": "2b2f54bb-c0d9-471f-be90-f9a6dda7c1df",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.1823,
+            "style_score": 0.1991
+          },
+          "creator_id": "cap_t3_n1"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0579,
+          "payload": {
+            "combined_score": 0.3171,
+            "confidence": 0.3171,
+            "content_id": "a71c263d-db2e-433b-9720-3c4831a27bf0",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3007,
+            "style_score": 0.3553
+          },
+          "creator_id": "cap_t3_n2"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0585,
+          "payload": {
+            "combined_score": 0.2201,
+            "confidence": 0.2201,
+            "content_id": "17bd9d4a-8fbb-4b61-be31-547488b83e4f",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2046,
+            "style_score": 0.2563
+          },
+          "creator_id": "cap_t3_n3"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0576,
+          "payload": {
+            "combined_score": 0.2648,
+            "confidence": 0.2648,
+            "content_id": "8bcb5b08-b7c2-4b1a-8331-189bc515dd26",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2541,
+            "style_score": 0.2898
+          },
+          "creator_id": "cap_t3_n4"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.056,
+          "payload": {
+            "combined_score": 0.2969,
+            "confidence": 0.2969,
+            "content_id": "74aa70f8-64fd-498e-aaf0-a6b79fda6581",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3299,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t3_n5"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0557,
+          "payload": {
+            "combined_score": 0.3207,
+            "confidence": 0.3207,
+            "content_id": "da948ac9-c60d-45b5-a41a-03898193fa8e",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3638,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t3_n6"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0563,
+          "payload": {
+            "combined_score": 0.3857,
+            "confidence": 0.3857,
+            "content_id": "fe6ec4f7-48d9-4fb2-a94f-75523a51d577",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.4286,
+            "style_score": 0.2857
+          },
+          "creator_id": "cap_t3_n7"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0584,
+          "payload": {
+            "combined_score": 0.3102,
+            "confidence": 0.3102,
+            "content_id": "ad74e01a-a6c7-4b1e-88b1-c88666b39486",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2988,
+            "style_score": 0.3369
+          },
+          "creator_id": "cap_t3_n8"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0637,
+          "payload": {
+            "combined_score": 0.3763,
+            "confidence": 0.3763,
+            "content_id": "0e2ec4ff-0d2b-4fe9-8105-1014b30a5b00",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.3747,
+            "style_score": 0.3802
+          },
+          "creator_id": "cap_t3_n9"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0609,
+          "payload": {
+            "combined_score": 0.3488,
+            "confidence": 0.3488,
+            "content_id": "6b56caf2-53e2-4674-8862-c96fb68abf9e",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.4541,
+            "style_score": 0.1031
+          },
+          "creator_id": "cap_t3_n10"
+        }
+      ]
+    }
+  ],
+  "c4": [
+    {
+      "trial": 1,
+      "http_400": 3,
+      "reject_rows": 3,
+      "decided_bad": 0,
+      "pass": true,
+      "responses": [
+        {
+          "status": 400,
+          "elapsed_s": 0.0013,
+          "payload": {
+            "error": "bad_input",
+            "message": "text is required and must be a string."
+          },
+          "sent": {
+            "creator_id": "cap_bad_missing_t1"
+          }
+        },
+        {
+          "status": 400,
+          "elapsed_s": 0.0008,
+          "payload": {
+            "error": "bad_input",
+            "message": "text must be at least 20 characters."
+          },
+          "sent": {
+            "text": "",
+            "creator_id": "cap_bad_empty_t1"
+          }
+        },
+        {
+          "status": 400,
+          "elapsed_s": 0.0007,
+          "payload": {
+            "error": "bad_input",
+            "message": "text must be at least 20 characters."
+          },
+          "sent": {
+            "text": "hi",
+            "creator_id": "cap_bad_short_t1"
+          }
+        }
+      ],
+      "log_rows": [
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "creator_id": "cap_bad_missing_t1",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text is required and must be a string.",
+          "latency_ms": 0.248
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "creator_id": "cap_bad_empty_t1",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text must be at least 20 characters.",
+          "latency_ms": 0.141
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "creator_id": "cap_bad_short_t1",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text must be at least 20 characters.",
+          "latency_ms": 0.133
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "http_400": 3,
+      "reject_rows": 3,
+      "decided_bad": 0,
+      "pass": true,
+      "responses": [
+        {
+          "status": 400,
+          "elapsed_s": 0.0014,
+          "payload": {
+            "error": "bad_input",
+            "message": "text is required and must be a string."
+          },
+          "sent": {
+            "creator_id": "cap_bad_missing_t2"
+          }
+        },
+        {
+          "status": 400,
+          "elapsed_s": 0.0009,
+          "payload": {
+            "error": "bad_input",
+            "message": "text must be at least 20 characters."
+          },
+          "sent": {
+            "text": "",
+            "creator_id": "cap_bad_empty_t2"
+          }
+        },
+        {
+          "status": 400,
+          "elapsed_s": 0.0008,
+          "payload": {
+            "error": "bad_input",
+            "message": "text must be at least 20 characters."
+          },
+          "sent": {
+            "text": "hi",
+            "creator_id": "cap_bad_short_t2"
+          }
+        }
+      ],
+      "log_rows": [
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "creator_id": "cap_bad_missing_t2",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text is required and must be a string.",
+          "latency_ms": 0.291
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "creator_id": "cap_bad_empty_t2",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text must be at least 20 characters.",
+          "latency_ms": 0.14
+        },
+        {
+          "timestamp": "2026-11-04T00:22:59+00:00",
+          "creator_id": "cap_bad_short_t2",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text must be at least 20 characters.",
+          "latency_ms": 0.136
+        }
+      ]
+    },
+    {
+      "trial": 3,
+      "http_400": 3,
+      "reject_rows": 3,
+      "decided_bad": 0,
+      "pass": true,
+      "responses": [
+        {
+          "status": 400,
+          "elapsed_s": 0.0012,
+          "payload": {
+            "error": "bad_input",
+            "message": "text is required and must be a string."
+          },
+          "sent": {
+            "creator_id": "cap_bad_missing_t3"
+          }
+        },
+        {
+          "status": 400,
+          "elapsed_s": 0.0008,
+          "payload": {
+            "error": "bad_input",
+            "message": "text must be at least 20 characters."
+          },
+          "sent": {
+            "text": "",
+            "creator_id": "cap_bad_empty_t3"
+          }
+        },
+        {
+          "status": 400,
+          "elapsed_s": 0.0008,
+          "payload": {
+            "error": "bad_input",
+            "message": "text must be at least 20 characters."
+          },
+          "sent": {
+            "text": "hi",
+            "creator_id": "cap_bad_short_t3"
+          }
+        }
+      ],
+      "log_rows": [
+        {
+          "timestamp": "2026-11-04T00:23:00+00:00",
+          "creator_id": "cap_bad_missing_t3",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text is required and must be a string.",
+          "latency_ms": 0.249
+        },
+        {
+          "timestamp": "2026-11-04T00:23:00+00:00",
+          "creator_id": "cap_bad_empty_t3",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text must be at least 20 characters.",
+          "latency_ms": 0.137
+        },
+        {
+          "timestamp": "2026-11-04T00:23:00+00:00",
+          "creator_id": "cap_bad_short_t3",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text must be at least 20 characters.",
+          "latency_ms": 0.134
+        }
+      ]
+    }
+  ],
+  "c5": [
+    {
+      "trial": 1,
+      "elapsed_s": 0.433,
+      "healthy": true,
+      "health": {
+        "detector_loaded": false,
+        "detector_model": "gpt2",
+        "log_entries": 285,
+        "ok": true,
+        "rate_limiting": true
+      },
+      "status": 200
+    },
+    {
+      "trial": 2,
+      "elapsed_s": 0.214,
+      "healthy": true,
+      "health": {
+        "detector_loaded": false,
+        "detector_model": "gpt2",
+        "log_entries": 285,
+        "ok": true,
+        "rate_limiting": true
+      },
+      "status": 200
+    },
+    {
+      "trial": 3,
+      "elapsed_s": 0.213,
+      "healthy": true,
+      "health": {
+        "detector_loaded": false,
+        "detector_model": "gpt2",
+        "log_entries": 285,
+        "ok": true,
+        "rate_limiting": true
+      },
+      "status": 200
+    }
+  ],
+  "verdicts": {
+    "c1": "MET",
+    "c2": "MET",
+    "c3": "MET",
+    "c4": "MET",
+    "c5": "MET"
+  },
+  "sample_trial1": {
+    "c1_rows": [
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8",
+        "creator_id": "cap_t1_n1",
+        "guess": "human",
+        "model_score": 0.1823,
+        "style_score": 0.1991,
+        "combined_score": 0.1873,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 283,
+        "latency_ms": 74.442
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "3ca44af2-68e9-4743-98f6-ec3eaf46de05",
+        "creator_id": "cap_t1_n2",
+        "guess": "human",
+        "model_score": 0.3007,
+        "style_score": 0.3553,
+        "combined_score": 0.3171,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 239,
+        "latency_ms": 57.942
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "69f19235-6acd-4d4a-8cb5-45d9fc7cfa8f",
+        "creator_id": "cap_t1_n3",
+        "guess": "human",
+        "model_score": 0.2046,
+        "style_score": 0.2563,
+        "combined_score": 0.2201,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 243,
+        "latency_ms": 64.731
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "c57859ee-2881-4b85-8161-056d9375f2d0",
+        "creator_id": "cap_t1_n4",
+        "guess": "human",
+        "model_score": 0.2541,
+        "style_score": 0.2898,
+        "combined_score": 0.2648,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 242,
+        "latency_ms": 54.892
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "1c804183-0c13-45da-8683-332f81cfa884",
+        "creator_id": "cap_t1_n5",
+        "guess": "human",
+        "model_score": 0.3299,
+        "style_score": 0.22,
+        "combined_score": 0.2969,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 233,
+        "latency_ms": 54.849
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "29643960-0984-42af-862e-268b57bb8f82",
+        "creator_id": "cap_t1_n6",
+        "guess": "human",
+        "model_score": 0.3638,
+        "style_score": 0.22,
+        "combined_score": 0.3207,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 248,
+        "latency_ms": 56.179
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "498f1a0e-08bc-478d-a857-247399d7d29c",
+        "creator_id": "cap_t1_n7",
+        "guess": "unsure",
+        "model_score": 0.4286,
+        "style_score": 0.2857,
+        "combined_score": 0.3857,
+        "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+        "status": "decided",
+        "text_chars": 234,
+        "latency_ms": 54.404
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "359ea537-2b72-41ae-ac1d-7428fb261733",
+        "creator_id": "cap_t1_n8",
+        "guess": "human",
+        "model_score": 0.2988,
+        "style_score": 0.3369,
+        "combined_score": 0.3102,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 252,
+        "latency_ms": 55.374
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "b53f9ebe-cefb-4e1f-82c2-ae4fdd01171b",
+        "creator_id": "cap_t1_n9",
+        "guess": "unsure",
+        "model_score": 0.3747,
+        "style_score": 0.3802,
+        "combined_score": 0.3763,
+        "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+        "status": "decided",
+        "text_chars": 246,
+        "latency_ms": 60.705
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "10834218-1f4e-4cfc-8a02-55d63f0b7838",
+        "creator_id": "cap_t1_n10",
+        "guess": "human",
+        "model_score": 0.4541,
+        "style_score": 0.1031,
+        "combined_score": 0.3488,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 242,
+        "latency_ms": 56.947
+      }
+    ],
+    "c2_rows": [
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8",
+        "creator_id": "cap_t1_n1",
+        "guess": "human",
+        "model_score": 0.1823,
+        "style_score": 0.1991,
+        "combined_score": 0.1873,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 283,
+        "latency_ms": 74.442
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "3ca44af2-68e9-4743-98f6-ec3eaf46de05",
+        "creator_id": "cap_t1_n2",
+        "guess": "human",
+        "model_score": 0.3007,
+        "style_score": 0.3553,
+        "combined_score": 0.3171,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 239,
+        "latency_ms": 57.942
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "69f19235-6acd-4d4a-8cb5-45d9fc7cfa8f",
+        "creator_id": "cap_t1_n3",
+        "guess": "human",
+        "model_score": 0.2046,
+        "style_score": 0.2563,
+        "combined_score": 0.2201,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 243,
+        "latency_ms": 64.731
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "c57859ee-2881-4b85-8161-056d9375f2d0",
+        "creator_id": "cap_t1_n4",
+        "guess": "human",
+        "model_score": 0.2541,
+        "style_score": 0.2898,
+        "combined_score": 0.2648,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 242,
+        "latency_ms": 54.892
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "1c804183-0c13-45da-8683-332f81cfa884",
+        "creator_id": "cap_t1_n5",
+        "guess": "human",
+        "model_score": 0.3299,
+        "style_score": 0.22,
+        "combined_score": 0.2969,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 233,
+        "latency_ms": 54.849
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "29643960-0984-42af-862e-268b57bb8f82",
+        "creator_id": "cap_t1_n6",
+        "guess": "human",
+        "model_score": 0.3638,
+        "style_score": 0.22,
+        "combined_score": 0.3207,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 248,
+        "latency_ms": 56.179
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "498f1a0e-08bc-478d-a857-247399d7d29c",
+        "creator_id": "cap_t1_n7",
+        "guess": "unsure",
+        "model_score": 0.4286,
+        "style_score": 0.2857,
+        "combined_score": 0.3857,
+        "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+        "status": "decided",
+        "text_chars": 234,
+        "latency_ms": 54.404
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "359ea537-2b72-41ae-ac1d-7428fb261733",
+        "creator_id": "cap_t1_n8",
+        "guess": "human",
+        "model_score": 0.2988,
+        "style_score": 0.3369,
+        "combined_score": 0.3102,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 252,
+        "latency_ms": 55.374
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "b53f9ebe-cefb-4e1f-82c2-ae4fdd01171b",
+        "creator_id": "cap_t1_n9",
+        "guess": "unsure",
+        "model_score": 0.3747,
+        "style_score": 0.3802,
+        "combined_score": 0.3763,
+        "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+        "status": "decided",
+        "text_chars": 246,
+        "latency_ms": 60.705
+      },
+      {
+        "timestamp": "2026-11-04T00:22:58+00:00",
+        "content_id": "10834218-1f4e-4cfc-8a02-55d63f0b7838",
+        "creator_id": "cap_t1_n10",
+        "guess": "human",
+        "model_score": 0.4541,
+        "style_score": 0.1031,
+        "combined_score": 0.3488,
+        "label": "We think a person wrote this.",
+        "status": "decided",
+        "text_chars": 242,
+        "latency_ms": 56.947
+      }
+    ],
+    "c3": {
+      "median_s": 0.0578,
+      "timings_s": [
+        0.0766,
+        0.0594,
+        0.0667,
+        0.0563,
+        0.0562,
+        0.0575,
+        0.0558,
+        0.0568,
+        0.0621,
+        0.0582
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "elapsed_s": 0.0766,
+          "payload": {
+            "combined_score": 0.1873,
+            "confidence": 0.1873,
+            "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.1823,
+            "style_score": 0.1991
+          },
+          "creator_id": "cap_t1_n1"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0594,
+          "payload": {
+            "combined_score": 0.3171,
+            "confidence": 0.3171,
+            "content_id": "3ca44af2-68e9-4743-98f6-ec3eaf46de05",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3007,
+            "style_score": 0.3553
+          },
+          "creator_id": "cap_t1_n2"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0667,
+          "payload": {
+            "combined_score": 0.2201,
+            "confidence": 0.2201,
+            "content_id": "69f19235-6acd-4d4a-8cb5-45d9fc7cfa8f",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2046,
+            "style_score": 0.2563
+          },
+          "creator_id": "cap_t1_n3"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0563,
+          "payload": {
+            "combined_score": 0.2648,
+            "confidence": 0.2648,
+            "content_id": "c57859ee-2881-4b85-8161-056d9375f2d0",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2541,
+            "style_score": 0.2898
+          },
+          "creator_id": "cap_t1_n4"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0562,
+          "payload": {
+            "combined_score": 0.2969,
+            "confidence": 0.2969,
+            "content_id": "1c804183-0c13-45da-8683-332f81cfa884",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3299,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t1_n5"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0575,
+          "payload": {
+            "combined_score": 0.3207,
+            "confidence": 0.3207,
+            "content_id": "29643960-0984-42af-862e-268b57bb8f82",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.3638,
+            "style_score": 0.22
+          },
+          "creator_id": "cap_t1_n6"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0558,
+          "payload": {
+            "combined_score": 0.3857,
+            "confidence": 0.3857,
+            "content_id": "498f1a0e-08bc-478d-a857-247399d7d29c",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.4286,
+            "style_score": 0.2857
+          },
+          "creator_id": "cap_t1_n7"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0568,
+          "payload": {
+            "combined_score": 0.3102,
+            "confidence": 0.3102,
+            "content_id": "359ea537-2b72-41ae-ac1d-7428fb261733",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.2988,
+            "style_score": 0.3369
+          },
+          "creator_id": "cap_t1_n8"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0621,
+          "payload": {
+            "combined_score": 0.3763,
+            "confidence": 0.3763,
+            "content_id": "b53f9ebe-cefb-4e1f-82c2-ae4fdd01171b",
+            "guess": "unsure",
+            "label": "We can't tell whether a person wrote this or a program did. You can ask us to look at it again.",
+            "model_score": 0.3747,
+            "style_score": 0.3802
+          },
+          "creator_id": "cap_t1_n9"
+        },
+        {
+          "status": 200,
+          "elapsed_s": 0.0582,
+          "payload": {
+            "combined_score": 0.3488,
+            "confidence": 0.3488,
+            "content_id": "10834218-1f4e-4cfc-8a02-55d63f0b7838",
+            "guess": "human",
+            "label": "We think a person wrote this.",
+            "model_score": 0.4541,
+            "style_score": 0.1031
+          },
+          "creator_id": "cap_t1_n10"
+        }
+      ]
+    },
+    "c4": {
+      "responses": [
+        {
+          "status": 400,
+          "elapsed_s": 0.0013,
+          "payload": {
+            "error": "bad_input",
+            "message": "text is required and must be a string."
+          },
+          "sent": {
+            "creator_id": "cap_bad_missing_t1"
+          }
+        },
+        {
+          "status": 400,
+          "elapsed_s": 0.0008,
+          "payload": {
+            "error": "bad_input",
+            "message": "text must be at least 20 characters."
+          },
+          "sent": {
+            "text": "",
+            "creator_id": "cap_bad_empty_t1"
+          }
+        },
+        {
+          "status": 400,
+          "elapsed_s": 0.0007,
+          "payload": {
+            "error": "bad_input",
+            "message": "text must be at least 20 characters."
+          },
+          "sent": {
+            "text": "hi",
+            "creator_id": "cap_bad_short_t1"
+          }
+        }
+      ],
+      "log_rows": [
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "creator_id": "cap_bad_missing_t1",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text is required and must be a string.",
+          "latency_ms": 0.248
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "creator_id": "cap_bad_empty_t1",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text must be at least 20 characters.",
+          "latency_ms": 0.141
+        },
+        {
+          "timestamp": "2026-11-04T00:22:58+00:00",
+          "creator_id": "cap_bad_short_t1",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "bad_input",
+          "message": "text must be at least 20 characters.",
+          "latency_ms": 0.133
+        }
+      ]
+    },
+    "c5": {
+      "trial": 1,
+      "elapsed_s": 0.433,
+      "healthy": true,
+      "health": {
+        "detector_loaded": false,
+        "detector_model": "gpt2",
+        "log_entries": 285,
+        "ok": true,
+        "rate_limiting": true
+      },
+      "status": 200
+    }
+  }
+}

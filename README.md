@@ -1089,6 +1089,146 @@ One piece of work: instrument the existing run path and measure it. Not a new de
 
 **How I measured it:** There is no API spend. The model runs locally. I started the service, sent one warm-up submit and threw that timing away (10.4111 s while `gpt2` loaded). Then I timed 10 submits of the same bus paragraph with `time.perf_counter` around the HTTP client call. The ten times were 0.0626, 0.0492, 0.0475, 0.0550, 0.0465, 0.0432, 0.0420, 0.0429, 0.0455, 0.0495 seconds. Mean 0.0484 s. Median 0.0470 s. Min 0.0420 s. Max 0.0626 s. Server-side `latency_ms` on those same rows sat between about 40 and 60 ms.
 
+---
+
+## Capstone Run Log
+
+Three trials of the five capstone criteria in `criteria.md`. Full machine-readable output: `results/capstone_criteria_2026-11-03_1623.json`. Summary table: `results/capstone_criteria_2026-11-03_1623.md`.
+
+Decided rows are written by `app.py::submit` → `audit.log_decision`. Rejections are written by `app.py::_reject_input` → `audit.log_rejection`. Client timings use `time.perf_counter` around `POST /submit`. Path B starts use `PORT=5001` per RUNNING.md when AirPlay holds 5000.
+
+| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
+|---|---|---|---|---|---|
+| 1. Every scored submit writes latency_ms | 10 of 10 with latency_ms > 0 | 10/10 | 10/10 | 10/10 | MET |
+| 2. Decided row names input and output fields | 10 of 10 complete field sets | 10/10 | 10/10 | 10/10 | MET |
+| 3. Cost per run stays under 3.0 s warm | median of 10 ≤ 3.0 s | 0.0578 s | 0.0568 s | 0.0582 s | MET |
+| 4. Refused body leaves timed rejection | 3 of 3 HTTP 400 + rejected + latency_ms > 0 | 3/3 | 3/3 | 3/3 | MET |
+| 5. Path B starts from documented command | healthy /health within 15 s | 0.433 s | 0.214 s | 0.213 s | MET |
+
+Trials 2 and 3 matched trial 1 on every pass/fail. The three C3 medians stayed under 0.06 s.
+
+**Real output from trial 1 of each criterion**
+
+### C1 trial 1 — three of ten decided rows from logs/audit.jsonl (via audit.log_decision)
+```json
+{"timestamp": "2026-11-04T00:22:58+00:00", "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8", "creator_id": "cap_t1_n1", "guess": "human", "model_score": 0.1823, "style_score": 0.1991, "combined_score": 0.1873, "label": "We think a person wrote this.", "status": "decided", "text_chars": 283, "latency_ms": 74.442}
+{"timestamp": "2026-11-04T00:22:58+00:00", "content_id": "3ca44af2-68e9-4743-98f6-ec3eaf46de05", "creator_id": "cap_t1_n2", "guess": "human", "model_score": 0.3007, "style_score": 0.3553, "combined_score": 0.3171, "label": "We think a person wrote this.", "status": "decided", "text_chars": 239, "latency_ms": 57.942}
+{"timestamp": "2026-11-04T00:22:58+00:00", "content_id": "10834218-1f4e-4cfc-8a02-55d63f0b7838", "creator_id": "cap_t1_n10", "guess": "human", "model_score": 0.4541, "style_score": 0.1031, "combined_score": 0.3488, "label": "We think a person wrote this.", "status": "decided", "text_chars": 242, "latency_ms": 56.947}
+```
+
+### C2 trial 1 — one full decided row (all required fields) from logs/audit.jsonl
+```json
+{
+  "timestamp": "2026-11-04T00:22:58+00:00",
+  "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8",
+  "creator_id": "cap_t1_n1",
+  "guess": "human",
+  "model_score": 0.1823,
+  "style_score": 0.1991,
+  "combined_score": 0.1873,
+  "label": "We think a person wrote this.",
+  "status": "decided",
+  "text_chars": 283,
+  "latency_ms": 74.442
+}
+```
+
+### C3 trial 1 — client timings (time.perf_counter around POST /submit) and one response
+```json
+{
+  "median_s": 0.0578,
+  "timings_s": [
+    0.0766,
+    0.0594,
+    0.0667,
+    0.0563,
+    0.0562,
+    0.0575,
+    0.0558,
+    0.0568,
+    0.0621,
+    0.0582
+  ],
+  "sample_response": {
+    "status": 200,
+    "payload": {
+      "guess": "human",
+      "combined_score": 0.1873,
+      "content_id": "85ebabf7-029a-43bd-a5cf-e104960febc8"
+    }
+  }
+}
+```
+
+### C4 trial 1 — HTTP responses and rejection log rows from audit.log_rejection
+```json
+{
+  "responses": [
+    {
+      "status": 400,
+      "error": "bad_input",
+      "message": "text is required and must be a string."
+    },
+    {
+      "status": 400,
+      "error": "bad_input",
+      "message": "text must be at least 20 characters."
+    },
+    {
+      "status": 400,
+      "error": "bad_input",
+      "message": "text must be at least 20 characters."
+    }
+  ],
+  "log_rows": [
+    {
+      "timestamp": "2026-11-04T00:22:58+00:00",
+      "creator_id": "cap_bad_missing_t1",
+      "event": "rejected",
+      "status": "rejected",
+      "reason": "bad_input",
+      "message": "text is required and must be a string.",
+      "latency_ms": 0.248
+    },
+    {
+      "timestamp": "2026-11-04T00:22:58+00:00",
+      "creator_id": "cap_bad_empty_t1",
+      "event": "rejected",
+      "status": "rejected",
+      "reason": "bad_input",
+      "message": "text must be at least 20 characters.",
+      "latency_ms": 0.141
+    },
+    {
+      "timestamp": "2026-11-04T00:22:58+00:00",
+      "creator_id": "cap_bad_short_t1",
+      "event": "rejected",
+      "status": "rejected",
+      "reason": "bad_input",
+      "message": "text must be at least 20 characters.",
+      "latency_ms": 0.133
+    }
+  ]
+}
+```
+
+### C5 trial 1 — GET /health after PORT=5001 start (RUNNING.md Path B)
+```json
+{
+  "elapsed_s": 0.433,
+  "status": 200,
+  "body": {
+    "detector_loaded": false,
+    "detector_model": "gpt2",
+    "log_entries": 285,
+    "ok": true,
+    "rate_limiting": true
+  }
+}
+```
+
+
+
 
 
 <!-- ═════════════════════════════════════════════════════════════════════
